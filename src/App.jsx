@@ -15,6 +15,7 @@ import ManageFaculty from './components/admin-dashboard/ManageFaculty';
 import ManageStudents from './components/admin-dashboard/ManageStudents';
 import ManageDepartment from './components/admin-dashboard/ManageDepartment';
 import { createGlobalStyle } from 'styled-components';
+import AdminDashboardWrapper from './components/AdminDashboardWrapper';
 
 function MainApp() {
   const action = useNavigationType();
@@ -63,7 +64,7 @@ function MainApp() {
       <Route path="/faculty/:uniqueId/whiteboard" element={<Whiteboard />} />
       <Route path="/student/dashboard" element={<StudentDashboard />} />
       <Route path="/faculty/dashboard" element={<FacultyDashboard />} />
-      <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      <Route path="/admin/dashboard" element={<AdminDashboardWrapper />} />
       <Route path="/admin/manage-faculty" element={<ManageFaculty />} />
       <Route path="/admin/manage-students" element={<ManageStudents />} />
       <Route path="/admin/manage-departments" element={<ManageDepartment />} />

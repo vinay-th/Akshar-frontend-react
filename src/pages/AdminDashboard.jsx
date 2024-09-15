@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import Logo from '../components/ui/logo.svg';
+import {
+  fetchClasses,
+  addClass,
+  editClass,
+  removeClass,
+} from '../store/actions/classDashboardActions';
 
 const iconPaths = {
   home: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
@@ -34,6 +41,44 @@ const Icon = ({ name, className = '' }) => (
   </svg>
 );
 
+const Dropdown = ({ onEdit, onRemove, isOpen, toggleDropdown }) => {
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        toggleDropdown();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, toggleDropdown]);
+
+  return (
+    <DropdownContainer ref={dropdownRef}>
+      <DropdownToggle onClick={toggleDropdown}>...</DropdownToggle>
+      {isOpen && (
+        <DropdownMenu>
+          <DropdownItem onClick={onEdit}>
+            <Icon name="fileText" className="h-4 w-4 mr-2" />
+            Edit
+          </DropdownItem>
+          <DropdownItem onClick={onRemove}>
+            <Icon name="logOut" className="h-4 w-4 mr-2" />
+            Remove
+          </DropdownItem>
+        </DropdownMenu>
+      )}
+    </DropdownContainer>
+  );
+};
+
 const navItems = [
   { text: 'Dashboard', icon: 'home', link: '/admin/dashboard' },
   { text: 'Lectures', icon: 'fileText', link: '/admin/lectures' },
@@ -57,130 +102,31 @@ const sidebarItems = [
   },
 ];
 
-const classesData = [
-  {
-    srNo: 1,
-    departmentName: 'Computer Science',
-    courseName: 'B.Tech',
-    semester: 'SEM III',
-    division: 'A',
-    classRoom: '101',
-  },
-  {
-    srNo: 2,
-    departmentName: 'Computer Science',
-    courseName: 'B.Tech',
-    semester: 'SEM III',
-    division: 'B',
-    classRoom: '102',
-  },
-  {
-    srNo: 3,
-    departmentName: 'Computer Science',
-    courseName: 'B.Sc IT',
-    semester: 'SEM V',
-    division: 'A',
-    classRoom: '201',
-  },
-  {
-    srNo: 4,
-    departmentName: 'Computer Science',
-    courseName: 'B.Sc IT',
-    semester: 'SEM V',
-    division: 'B',
-    classRoom: '202',
-  },
-  {
-    srNo: 5,
-    departmentName: 'Electronics Engineering',
-    courseName: 'B.E',
-    semester: 'SEM IV',
-    division: 'A',
-    classRoom: '301',
-  },
-  {
-    srNo: 6,
-    departmentName: 'Electronics Engineering',
-    courseName: 'B.E',
-    semester: 'SEM IV',
-    division: 'B',
-    classRoom: '302',
-  },
-  {
-    srNo: 7,
-    departmentName: 'Mechanical Engineering',
-    courseName: 'B.Tech',
-    semester: 'SEM II',
-    division: 'A',
-    classRoom: '401',
-  },
-  {
-    srNo: 8,
-    departmentName: 'Mechanical Engineering',
-    courseName: 'B.Tech',
-    semester: 'SEM II',
-    division: 'B',
-    classRoom: '402',
-  },
-  {
-    srNo: 9,
-    departmentName: 'Information Technology',
-    courseName: 'B.Sc IT',
-    semester: 'SEM VI',
-    division: 'A',
-    classRoom: '501',
-  },
-  {
-    srNo: 10,
-    departmentName: 'Information Technology',
-    courseName: 'B.Sc IT',
-    semester: 'SEM VI',
-    division: 'B',
-    classRoom: '502',
-  },
-  {
-    srNo: 11,
-    departmentName: 'Electronics Engineering',
-    courseName: 'B.E',
-    semester: 'SEM IV',
-    division: 'B',
-    classRoom: '302',
-  },
-  {
-    srNo: 12,
-    departmentName: 'Mechanical Engineering',
-    courseName: 'B.Tech',
-    semester: 'SEM II',
-    division: 'A',
-    classRoom: '401',
-  },
-  {
-    srNo: 13,
-    departmentName: 'Mechanical Engineering',
-    courseName: 'B.Tech',
-    semester: 'SEM II',
-    division: 'B',
-    classRoom: '402',
-  },
-  {
-    srNo: 14,
-    departmentName: 'Information Technology',
-    courseName: 'B.Sc IT',
-    semester: 'SEM VI',
-    division: 'A',
-    classRoom: '501',
-  },
-  {
-    srNo: 15,
-    departmentName: 'Information Technology',
-    courseName: 'B.Sc IT',
-    semester: 'SEM VI',
-    division: 'B',
-    classRoom: '502',
-  },
-];
-
 export default function AdminDashboard() {
+  const [openDropdownId, setOpenDropdownId] = useState(null);
+  const dispatch = useDispatch();
+  const classes = useSelector((state) => state.dashboard.classes);
+
+  useEffect(() => {
+    dispatch(fetchClasses());
+  }, [dispatch]);
+
+  const handleEdit = (id) => {
+    console.log(`Edit class with id: ${id}`);
+  };
+
+  const handleRemove = (id) => {
+    dispatch(removeClass(id));
+  };
+
+  const handleAddClass = () => {
+    console.log('Add new class');
+  };
+
+  const toggleDropdown = (id) => {
+    setOpenDropdownId(openDropdownId === id ? null : id);
+  };
+
   return (
     <Container>
       <Header>
@@ -192,16 +138,15 @@ export default function AdminDashboard() {
           </LogoContainer>
           <Nav>
             {navItems.map((item) => (
-              <a href={item.link} style={{ textDecoration: 'none' }}>
-                <NavButton key={item.text}>
+              <NavLink key={item.text} href={item.link}>
+                <NavButton>
                   <Icon name={item.icon} className="h-4 w-4 mr-2" />
                   {item.text}
                 </NavButton>
-              </a>
+              </NavLink>
             ))}
           </Nav>
           <UserButton>
-            {/* user details */}
             <Icon name="user" className="h-6 w-6" />
           </UserButton>
         </HeaderContent>
@@ -209,16 +154,10 @@ export default function AdminDashboard() {
       <Main>
         <Sidebar>
           {sidebarItems.map((item) => (
-            <SidebarButton key={item.text}>
-              <React.Fragment key={item.text}>
-                <a href={item.link} style={{ textDecoration: 'none' }}>
-                  <SidebarButton>
-                    <Icon name={item.icon} className="h-5 w-5 mr-2" />
-                    {item.text}
-                  </SidebarButton>
-                </a>
-              </React.Fragment>
-            </SidebarButton>
+            <SidebarLink key={item.text} href={item.link}>
+              <Icon name={item.icon} className="h-5 w-5 mr-2" />
+              {item.text}
+            </SidebarLink>
           ))}
         </Sidebar>
         <Content>
@@ -232,10 +171,11 @@ export default function AdminDashboard() {
                 <Th>Semester</Th>
                 <Th>Division</Th>
                 <Th>Class room</Th>
+                <Th>Actions</Th>
               </tr>
             </thead>
             <tbody>
-              {classesData.map((row) => (
+              {classes.map((row) => (
                 <tr key={`row-${row.srNo}`}>
                   <Td>{row.srNo}</Td>
                   <Td>{row.departmentName}</Td>
@@ -243,13 +183,22 @@ export default function AdminDashboard() {
                   <Td>{row.semester}</Td>
                   <Td>{row.division}</Td>
                   <Td>{row.classRoom}</Td>
+                  <Td>
+                    <Dropdown
+                      onEdit={() => handleEdit(row.srNo)}
+                      onRemove={() => handleRemove(row.srNo)}
+                      isOpen={openDropdownId === row.srNo}
+                      toggleDropdown={() => toggleDropdown(row.srNo)}
+                    />
+                  </Td>
                 </tr>
               ))}
             </tbody>
           </Table>
           <ButtonContainer>
-            <ActionButton className="add-class">Add Class</ActionButton>
-            <ActionButton className="edit-class">Edit Class</ActionButton>
+            <ActionButton className="add-class" onClick={handleAddClass}>
+              Add Class
+            </ActionButton>
           </ButtonContainer>
         </Content>
       </Main>
@@ -326,24 +275,6 @@ const Sidebar = styled.aside`
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 `;
 
-const SidebarButton = styled.button`
-  width: 100%;
-  padding: 0.75rem;
-  text-align: left;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  color: #4b5563;
-  font-size: 0.875rem;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #f3f4f6;
-  }
-`;
-
 const Content = styled.div`
   flex: 1;
   background-color: white;
@@ -406,11 +337,69 @@ const ActionButton = styled.button`
       background-color: #059669;
     }
   }
+`;
 
-  &.edit-class {
-    background-color: #f59e0b;
-    &:hover {
-      background-color: #d97706;
-    }
+const DropdownContainer = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+const DropdownToggle = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25rem;
+  color: #4b5563;
+`;
+
+const DropdownMenu = styled.div`
+  position: absolute;
+  right: -20px;
+  z-index: 1;
+  min-width: 120px;
+  padding: 0.5rem 0;
+  margin: 0.125rem 0 0;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+`;
+
+const DropdownItem = styled.button`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.25rem 1rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+`;
+
+const NavLink = styled.a`
+  text-decoration: none;
+`;
+
+const SidebarLink = styled.a`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem;
+  text-decoration: none;
+  color: #4b5563;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f3f4f6;
   }
 `;

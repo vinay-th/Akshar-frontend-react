@@ -1,10 +1,10 @@
 import React from 'react';
-import Landing from '../components/Landing';
-import Features from '../components/Features';
-import Testimonials from '../components/Testimonials.jsx';
-import FAQ from '../components/FAQ.jsx';
-import OurTeam from '../components/OurTeam.jsx';
-import Footer from '../components/Footer.jsx';
+import Landing from './component/Herosection/Landing';
+import Features from './component/Herosection/Features';
+import Testimonials from './component/Herosection/Testimonials.jsx';
+import FAQ from './component/Herosection/FAQ.jsx';
+import OurTeam from './component/Herosection/OurTeam.jsx';
+import Footer from './component/Herosection/Footer.jsx';
 
 const Herosection = () => {
   return (

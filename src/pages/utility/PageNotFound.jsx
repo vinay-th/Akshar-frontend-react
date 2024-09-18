@@ -9,6 +9,17 @@ import NotFoundImage from '../../images/404-illustration.svg';
 function PageNotFound() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const backToDashBoard = () => {
+    const role = getUserRole();
+    if (role === 'ADMIN') {
+      navigate('/admin/dashboard');
+    } else if (role === 'TEACHER') {
+      navigate('/teacher/dashboard');
+    } else if (role === 'STUDENT') {
+      navigate('/student/dashboard');
+    }
+  };
+
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}

@@ -47,7 +47,7 @@ function    DepartmentTableItem(props) {
 
   return (
     <tr>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+      <td className="px-3 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
         <div className="flex items-center">
           <label className="inline-flex">
             <span className="sr-only">Select</span>
@@ -56,10 +56,10 @@ function    DepartmentTableItem(props) {
         </div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div className="font-medium text-sky-500">{props.departmentId}</div>
+        <div className="font-medium text-sky-500">#{props.departmentId}</div>
       </td>    
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div className={`font-medium ${totalColor(props.status)}`}>{props.departmentName}</div>
+      <td className="px-1 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+        <div className={`font-medium text-slate-800`}>{props.departmentName}</div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className={`inline-flex font-medium rounded-full text-center px-2.5 py-0.5 ${statusColor(props.status)}`}>{props.departmentShortName}</div>
@@ -73,7 +73,7 @@ function    DepartmentTableItem(props) {
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div>{props.teachers}</div>
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+      <td className="px-3 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
         <div className="space-x-1">
           <button className="text-slate-400 hover:text-slate-500 rounded-full">
             <span className="sr-only">Edit</span>

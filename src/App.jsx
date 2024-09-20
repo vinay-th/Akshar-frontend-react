@@ -27,7 +27,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route exact path="/" element={<Herosection />} />
+        <Route  path="/" element={<Herosection />} />
         <Route path="/login" element={<Signin />} />
 
         {/*Admin routes*/}

@@ -1,3 +1,4 @@
+
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import DepartmentTableItem from "./DepartmentTableItem";
@@ -12,6 +13,7 @@ function DepartmentTable({
     const {departmentList, numberOfDepartment} = useSelector((store) => store.departmentStore);
     const dispatch=useDispatch();
 
+
     const [selectAll, setSelectAll] = useState(false);
     const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
     const [editDepartmentVo, setEditDepartmentVo] = useState({})
@@ -21,13 +23,14 @@ function DepartmentTable({
         e.stopPropagation();
         setFeedbackModalOpen(true);
         setEditDepartmentVo(department);
-    }
 
+    }
     const deleteDepartment = async (data) => {
         const response = await removeDepartment(data);
         if (response.status) {
             dispatch(departmentActions.deleteDepartment(response.body.id));
         }
+
     }
 
     const handleSelectAll = () => {
@@ -130,6 +133,7 @@ function DepartmentTable({
                     </table>
                 </div>
             </div>
+
         </div>
     );
 }

@@ -8,6 +8,10 @@ const departmentSlice = createSlice({
             state.departmentList = action.payload.departmentList;
             state.numberOfDepartment=state.departmentList.length;
         },
+        deleteDepartment: (state, action) => {
+            state.departmentList = action.payload.departmentList;
+            state.numberOfDepartment=state.departmentList.length;
+        },
     },
 });
 

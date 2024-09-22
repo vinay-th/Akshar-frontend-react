@@ -1,12 +1,12 @@
 import ModalBasic from "../../components/ModalBasic";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {checkForDepartmentIdAvail, updateDepartment} from "../../apis/admin/departments";
+import {checkForDepartmentIdAvail, createDepartment, updateDepartment} from "../../apis/admin/departments";
 import { getAllTeacherByDepartment } from "../../apis/admin/teacher";
 import {useDispatch} from "react-redux";
 import {departmentActions} from "../../store/admin/departmentStore";
 
-const DepartmentEditModel = (props) => {
+const DepartmentCreateModel = (props) => {
   const {
     register,
     handleSubmit,
@@ -20,44 +20,18 @@ const DepartmentEditModel = (props) => {
   const [teacherList, setTeacherList] = useState([]);
 
   useEffect(() => {
-    const fetchTeachers = async ({ id, departmentId }) => {
-      const response = await getAllTeacherByDepartment({ id, departmentId });
-      setTeacherList(response.body.teacherList);
-    };
 
-    if (props.editDepartmentVo.departmentId) {
-      fetchTeachers({
-        id: props.editDepartmentVo.id,
-        departmentId: props.editDepartmentVo.departmentId,
-      });
-      setValue("departmentId", props.editDepartmentVo.departmentId);
-      setValue("departmentName", props.editDepartmentVo.departmentName);
-      setValue(
-        "departmentShortName",
-        props.editDepartmentVo.departmentShortName
-      );
-      setValue("teacherInfo",props.editDepartmentVo.teacherInfo)
-    }
-  }, [props.editDepartmentVo]);
+  }, []);
 
-  const selectedTeacher = watch("teacherInfo");
 
   const onSubmit = async (data, event) => {
     event.preventDefault();
     try {
-      const response = await updateDepartment(
-          {
-            id:props.editDepartmentVo.id,
-            departmentId:data.departmentId,
-            departmentName:data.departmentName,
-            departmentShortName:data.departmentShortName,
-            teacherInfo:data.teacherInfo
-          }
-      );
-
-      if (response.status) {
-          dispatch(departmentActions.updateDepartment(response.body));
-          props.setFeedbackModalOpen(false);
+      console.log(data);
+      const response=await createDepartment(data);
+      if (response.status)
+      {
+        dispatch(departmentActions.addDepartment(response.body))
       }
     } catch (error) {
       alert(error);
@@ -66,10 +40,10 @@ const DepartmentEditModel = (props) => {
 
   return (
     <ModalBasic
-      id="edit-department-model"
-      modalOpen={props.feedbackModalOpen}
-      setModalOpen={props.setFeedbackModalOpen}
-      title="Edit Department"
+      id="create-department-model"
+      modalOpen={props.createDepartmentModel}
+      setModalOpen={props.setCreateDepartmentModel}
+      title="Create Department"
     >
       {/* Modal content */}
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -87,7 +61,7 @@ const DepartmentEditModel = (props) => {
                 {...register("departmentId", {
                   required: "Department Id is required.",
                   validate: async (value) => {
-                    let response = await checkForDepartmentIdAvail(value,props.editDepartmentVo.id);
+                    let response = await checkForDepartmentIdAvail(value);
                     return response.status || "Department Id already in use.";
                   },
                   pattern: {
@@ -125,29 +99,6 @@ const DepartmentEditModel = (props) => {
                 })}
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="email">
-                Choose Department Head<span className="text-rose-500">*</span>
-              </label>
-              <select
-                  id="teacherInfo"
-                  className="form-select"
-                  {...register("teacherInfo", {
-                    required: "Department ShortName is Required.",
-                  })}
-                  value={selectedTeacher} // Set the value explicitly to ensure the field is controlled
-              >
-                <option value="">Choose Teacher Id</option>
-                {teacherList.map((teacher) => (
-                    <option
-                        key={teacher.id}
-                        value={`${teacher.firstName} ${teacher.lastName} (${teacher.teacherId})`}
-                    >
-                      {`${teacher.firstName} ${teacher.lastName} (${teacher.teacherId})`}
-                    </option>
-                ))}
-              </select>
-            </div>
           </div>
         </div>
         {/* Modal footer */}
@@ -157,7 +108,7 @@ const DepartmentEditModel = (props) => {
                 className="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                 onClick={(e) => {
                   e.stopPropagation();
-                  props.setFeedbackModalOpen(false);
+                  props.setCreateDepartmentModel(false);
                 }}
             >
               Cancel
@@ -166,7 +117,7 @@ const DepartmentEditModel = (props) => {
                 className="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
                 type={"submit"}
             >
-              Update
+              Create
             </button>
           </div>
         </div>
@@ -175,4 +126,4 @@ const DepartmentEditModel = (props) => {
   );
 };
 
-export default DepartmentEditModel;
+export default DepartmentCreateModel;

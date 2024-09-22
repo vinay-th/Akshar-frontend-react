@@ -1,27 +1,33 @@
 import React, {useState, useEffect} from 'react';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import DepartmentTableItem from "./DepartmentTableItem";
 import DepartmentEditModel from "./DepartmentEditModel";
+import {removeDepartment} from "../../apis/admin/departments";
+import {departmentActions} from "../../store/admin/departmentStore";
 
 function DepartmentTable({
                              selectedItems
                          }) {
 
     const {departmentList, numberOfDepartment} = useSelector((store) => store.departmentStore);
+    const dispatch=useDispatch();
 
     const [selectAll, setSelectAll] = useState(false);
     const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
-    const [editDepartmentVo,setEditDepartmentVo]=useState({})
+    const [editDepartmentVo, setEditDepartmentVo] = useState({})
     const [isCheck, setIsCheck] = useState([]);
 
-    const editDepartment = (e,department) => {
+    const editDepartment = (e, department) => {
         e.stopPropagation();
         setFeedbackModalOpen(true);
         setEditDepartmentVo(department);
     }
 
-    const deleteDepartment = () => {
-
+    const deleteDepartment = async (data) => {
+        const response = await removeDepartment(data);
+        if (response.status) {
+            dispatch(departmentActions.deleteDepartment(response.body.id));
+        }
     }
 
     const handleSelectAll = () => {
@@ -109,12 +115,13 @@ function DepartmentTable({
                                         departmentId={department.departmentId}
                                         departmentName={department.departmentName}
                                         departmentShortName={department.departmentShortName}
-                                        teacherVo={department.teacherVo}
+                                        teacherInfo={department.teacherInfo}
                                         courses={department.courses}
                                         teachers={department.teachers}
                                         handleClick={handleClick}
                                         isChecked={isCheck.includes(department.id)}
                                         editDepartment={editDepartment}
+                                        deleteDepartment={deleteDepartment}
                                     />
                                 )
                             })

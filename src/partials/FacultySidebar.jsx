@@ -52,7 +52,7 @@ function FacultySidebar({ sidebarOpen, setSidebarOpen }) {
 
   return (
     <div>
-      {/* AdminSidebar backdrop (mobile only) */}
+      {/* FacultySidebar backdrop (mobile only) */}
       <div
         className={`fixed inset-0 bg-slate-900 bg-opacity-30 z-40 lg:hidden lg:z-auto transition-opacity duration-200 ${
           sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
@@ -60,7 +60,7 @@ function FacultySidebar({ sidebarOpen, setSidebarOpen }) {
         aria-hidden="true"
       ></div>
 
-      {/* AdminSidebar */}
+      {/* FacultySidebar */}
       <div
         id="sidebar"
         ref={sidebar}
@@ -68,7 +68,7 @@ function FacultySidebar({ sidebarOpen, setSidebarOpen }) {
           sidebarOpen ? 'translate-x-0' : '-translate-x-64'
         }`}
       >
-        {/* AdminSidebar header */}
+        {/* FacultySidebar header */}
         <div className="flex justify-between mb-10 pr-3 sm:px-2">
           {/* Close button */}
           <button
@@ -1052,7 +1052,7 @@ function FacultySidebar({ sidebarOpen, setSidebarOpen }) {
                   </div>
                 </NavLink>
               </li>
-              {/* AdminCalendar */}
+              {/* FacultyCalendar */}
               <li
                 className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
                   pathname.includes('calendar') && 'bg-slate-900'
@@ -1086,7 +1086,7 @@ function FacultySidebar({ sidebarOpen, setSidebarOpen }) {
                   </div>
                 </NavLink>
               </li>
-              {/* AdminCampaigns */}
+              {/* FacultyCampaigns */}
               <li
                 className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
                   pathname.includes('campaigns') && 'bg-slate-900'

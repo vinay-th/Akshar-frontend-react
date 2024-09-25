@@ -13,6 +13,8 @@ import AdminRoutes from './pages/component/auth/AdminRoutes';
 import StudentRoutes from './pages/component/auth/StudentRoutes';
 import TeacherRoutes from './pages/component/auth/TeacherRoutes';
 import AdminDashboard from './pages/users/admin/AdminDashboard';
+import StudentDashboard from './pages/users/student/StudentDashboard';
+import TeacherDashboard from './pages/users/teacher/TeacherDashboard';
 import ManageDepartments from './pages/users/admin/ManageDepartments';
 
 function App() {
@@ -27,7 +29,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route  path="/" element={<Herosection />} />
+        <Route path="/" element={<Herosection />} />
         <Route path="/login" element={<Signin />} />
 
         {/*Admin routes*/}
@@ -45,7 +47,7 @@ function App() {
 
         {/*Faculty routes*/}
         <Route path="/faculty" element={<TeacherRoutes />}>
-          <Route path="dashboard" element={<AdminAnalytics />} />
+          <Route path="dashboard" element={<TeacherDashboard />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />

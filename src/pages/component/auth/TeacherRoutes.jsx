@@ -1,19 +1,17 @@
-import {Outlet, useNavigate} from "react-router-dom";
-import {useEffect} from "react";
-import {getUserRole} from "../../../service/localstorage";
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { getUserRole } from '../../../service/localstorage';
 
-const TeacherRoutes=()=>{
+const TeacherRoutes = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const role = getUserRole();
+    if (role !== 'TEACHER') {
+      navigate('/login');
+    }
+  }, []);
 
-    const navigate=useNavigate();
-    useEffect(() => {
-        const role=getUserRole();
-        if (role!=="Teacher")
-        {
-            navigate("/login");
-        }
-    }, []);
-
-    return <Outlet></Outlet>
-}
+  return <Outlet></Outlet>;
+};
 
 export default TeacherRoutes;

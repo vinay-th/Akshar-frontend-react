@@ -4,7 +4,10 @@ import Transition from '../utils/Transition';
 
 import UserAvatar from '../images/user-avatar-32.png';
 
-function DropdownProfile({ align }) {
+function DropdownProfile({
+  align
+}) {
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef(null);
@@ -14,12 +17,7 @@ function DropdownProfile({ align }) {
   useEffect(() => {
     const clickHandler = ({ target }) => {
       if (!dropdown.current) return;
-      if (
-        !dropdownOpen ||
-        dropdown.current.contains(target) ||
-        trigger.current.contains(target)
-      )
-        return;
+      if (!dropdownOpen || dropdown.current.contains(target) || trigger.current.contains(target)) return;
       setDropdownOpen(false);
     };
     document.addEventListener('click', clickHandler);
@@ -45,30 +43,17 @@ function DropdownProfile({ align }) {
         onClick={() => setDropdownOpen(!dropdownOpen)}
         aria-expanded={dropdownOpen}
       >
-        <img
-          className="w-8 h-8 rounded-full"
-          src={UserAvatar}
-          width="32"
-          height="32"
-          alt="User"
-        />
+        <img className="w-8 h-8 rounded-full" src={UserAvatar} width="32" height="32" alt="User" />
         <div className="flex items-center truncate">
-          <span className="truncate ml-2 text-sm font-medium group-hover:text-slate-800">
-            Admin
-          </span>
-          <svg
-            className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
-            viewBox="0 0 12 12"
-          >
+          <span className="truncate ml-2 text-sm font-medium group-hover:text-slate-800">Acme Inc.</span>
+          <svg className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400" viewBox="0 0 12 12">
             <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
           </svg>
         </div>
       </button>
 
       <Transition
-        className={`origin-top-right z-10 absolute top-full min-w-44 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1 ${
-          align === 'right' ? 'right-0' : 'left-0'
-        }`}
+        className={`origin-top-right z-10 absolute top-full min-w-44 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1 ${align === 'right' ? 'right-0' : 'left-0'}`}
         show={dropdownOpen}
         enter="transition ease-out duration-200 transform"
         enterStart="opacity-0 -translate-y-2"
@@ -83,7 +68,7 @@ function DropdownProfile({ align }) {
           onBlur={() => setDropdownOpen(false)}
         >
           <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200">
-            <div className="font-medium text-slate-800">Admin</div>
+            <div className="font-medium text-slate-800">Acme Inc.</div>
             <div className="text-xs text-slate-500 italic">Administrator</div>
           </div>
           <ul>
@@ -109,7 +94,7 @@ function DropdownProfile({ align }) {
         </div>
       </Transition>
     </div>
-  );
+  )
 }
 
 export default DropdownProfile;

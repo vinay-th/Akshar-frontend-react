@@ -4,7 +4,8 @@ import departmentSlice from "./admin/departmentStore";
 
 const store = configureStore({
   reducer: {
-    userDetails: userDetailsSlice.reducer,departmentStore: departmentSlice.reducer,
+    userDetailStore: userDetailsSlice.reducer,
+    departmentStore: departmentSlice.reducer,
   },
 });
 

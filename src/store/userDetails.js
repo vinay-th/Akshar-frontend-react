@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const userDetailsSlice = createSlice({
-  name: "userDetails",
-  initialState: { username: null, emailAddress: null, token: null },
+  name: "userDetailStore",
+  initialState: { username: null, role: null },
   reducers: {
     saveUsername: (state, action) => {
       state.username = action.payload.username;
+      state.role = action.payload.role;
     },
   },
 });

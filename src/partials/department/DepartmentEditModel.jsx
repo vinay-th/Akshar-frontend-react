@@ -1,10 +1,13 @@
 import ModalBasic from "../../components/ModalBasic";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {checkForDepartmentIdAvail, updateDepartment} from "../../apis/admin/departments";
+import {
+  checkForDepartmentIdAvail,
+  updateDepartment,
+} from "../../apis/admin/departments";
 import { getAllTeacherByDepartment } from "../../apis/admin/teacher";
-import {useDispatch} from "react-redux";
-import {departmentActions} from "../../store/admin/departmentStore";
+import { useDispatch } from "react-redux";
+import { departmentActions } from "../../store/admin/departmentStore";
 
 const DepartmentEditModel = (props) => {
   const {
@@ -15,16 +18,19 @@ const DepartmentEditModel = (props) => {
     formState: { errors },
   } = useForm();
 
-
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   const [teacherList, setTeacherList] = useState([]);
 
-  useEffect(() => {
-    const fetchTeachers = async ({ id, departmentId }) => {
+  const fetchTeachers = async ({ id, departmentId }) => {
+    try {
       const response = await getAllTeacherByDepartment({ id, departmentId });
       setTeacherList(response.body.teacherList);
-    };
+    } catch (error) {
+      console.error("Error fetching teachers: ", error);
+    }
+  };
 
+  useEffect(() => {
     if (props.editDepartmentVo.departmentId) {
       fetchTeachers({
         id: props.editDepartmentVo.id,
@@ -36,28 +42,25 @@ const DepartmentEditModel = (props) => {
         "departmentShortName",
         props.editDepartmentVo.departmentShortName
       );
-      setValue("teacherInfo",props.editDepartmentVo.teacherInfo)
+      setValue("teacherInfo", props.editDepartmentVo.teacherInfo);
     }
-  }, [props.editDepartmentVo]);
+  }, [props.editDepartmentVo, setValue]);
 
   const selectedTeacher = watch("teacherInfo");
 
-  const onSubmit = async (data, event) => {
-    event.preventDefault();
+  const onSubmit = async (data) => {
     try {
-      const response = await updateDepartment(
-          {
-            id:props.editDepartmentVo.id,
-            departmentId:data.departmentId,
-            departmentName:data.departmentName,
-            departmentShortName:data.departmentShortName,
-            teacherInfo:data.teacherInfo
-          }
-      );
+      const response = await updateDepartment({
+        id: props.editDepartmentVo.id,
+        departmentId: data.departmentId,
+        departmentName: data.departmentName,
+        departmentShortName: data.departmentShortName,
+        teacherInfo: data.teacherInfo,
+      });
 
       if (response.status) {
-          dispatch(departmentActions.updateDepartment(response.body));
-          props.setFeedbackModalOpen(false);
+        dispatch(departmentActions.updateDepartment(response.body));
+        props.setFeedbackModalOpen(false);
       }
     } catch (error) {
       alert(error);
@@ -87,7 +90,10 @@ const DepartmentEditModel = (props) => {
                 {...register("departmentId", {
                   required: "Department Id is required.",
                   validate: async (value) => {
-                    let response = await checkForDepartmentIdAvail(value,props.editDepartmentVo.id);
+                    let response = await checkForDepartmentIdAvail(
+                      value,
+                      props.editDepartmentVo.id
+                    );
                     return response.status || "Department Id already in use.";
                   },
                   pattern: {
@@ -96,6 +102,9 @@ const DepartmentEditModel = (props) => {
                   },
                 })}
               />
+              {errors.departmentId && (
+                <p className="text-red-500">{errors.departmentId.message}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium mb-1" htmlFor="name">
@@ -110,6 +119,9 @@ const DepartmentEditModel = (props) => {
                   required: "Department Name is  Required.",
                 })}
               />
+              {errors.departmentName && (
+                <p className="text-red-500">{errors.departmentName.message}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium mb-1" htmlFor="name">
@@ -124,29 +136,37 @@ const DepartmentEditModel = (props) => {
                   required: "Department ShortName is  Required.",
                 })}
               />
+              {errors.departmentShortName && (
+                <p className="text-red-500">
+                  {errors.departmentShortName.message}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium mb-1" htmlFor="email">
                 Choose Department Head<span className="text-rose-500">*</span>
               </label>
               <select
-                  id="teacherInfo"
-                  className="form-select"
-                  {...register("teacherInfo", {
-                    required: "Department ShortName is Required.",
-                  })}
-                  value={selectedTeacher} // Set the value explicitly to ensure the field is controlled
+                id="teacherInfo"
+                className="form-select"
+                {...register("teacherInfo", {
+                  required: "Head Of Department Required.",
+                })}
+                // value={selectedTeacher} // Set the value explicitly to ensure the field is controlled
               >
                 <option value="">Choose Teacher Id</option>
                 {teacherList.map((teacher) => (
-                    <option
-                        key={teacher.id}
-                        value={`${teacher.firstName} ${teacher.lastName} (${teacher.teacherId})`}
-                    >
-                      {`${teacher.firstName} ${teacher.lastName} (${teacher.teacherId})`}
-                    </option>
+                  <option
+                    key={teacher.id}
+                    value={`${teacher.firstName} ${teacher.lastName} (${teacher.teacherId})`}
+                  >
+                    {`${teacher.firstName} ${teacher.lastName} (${teacher.teacherId})`}
+                  </option>
                 ))}
               </select>
+              {errors.teacherInfo && (
+                <p className="text-red-500">{errors.teacherInfo.message}</p>
+              )}
             </div>
           </div>
         </div>
@@ -154,17 +174,17 @@ const DepartmentEditModel = (props) => {
         <div className="px-5 py-4 border-t border-slate-200">
           <div className="flex flex-wrap justify-end space-x-2">
             <button
-                className="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  props.setFeedbackModalOpen(false);
-                }}
+              className="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
+              onClick={(e) => {
+                e.preventDefault(); // prevent form submission
+                props.setFeedbackModalOpen(false);
+              }}
             >
               Cancel
             </button>
             <button
-                className="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
-                type={"submit"}
+              className="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
+              type={"submit"}
             >
               Update
             </button>

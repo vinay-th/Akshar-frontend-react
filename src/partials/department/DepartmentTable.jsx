@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import DepartmentTableItem from './DepartmentTableItem';
-import DepartmentEditModel from './DepartmentEditModel';
-import { removeDepartment } from '../../apis/admin/departments';
-import { departmentActions } from '../../store/admin/departmentStore';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import DepartmentTableItem from "./DepartmentTableItem";
+import DepartmentEditModel from "./DepartmentEditModel";
+import { removeDepartment } from "../../apis/admin/departments";
+import { departmentActions } from "../../store/admin/departmentStore";
 
 function DepartmentTable({ selectedItems }) {
   const { departmentList, numberOfDepartment } = useSelector(
@@ -55,9 +55,9 @@ function DepartmentTable({ selectedItems }) {
     <div className="bg-white shadow-lg rounded-sm border border-slate-200 relative">
       <header className="px-3 py-4">
         <h2 className="font-semibold text-slate-800">
-          Departments{' '}
+          Departments{" "}
           <span className="text-slate-400 font-medium">
-            {' '}
+            {" "}
             {numberOfDepartment}
           </span>
         </h2>
@@ -96,9 +96,11 @@ function DepartmentTable({ selectedItems }) {
                 <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                   <div className="font-semibold text-left">Short Name</div>
                 </th>
-                {/* <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div className="font-semibold text-left">Head Of Department</div>
-                            </th> */}
+                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                  <div className="font-semibold text-left">
+                    Head Of Department
+                  </div>
+                </th>
                 <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                   <div className="font-semibold text-left">Courses</div>
                 </th>

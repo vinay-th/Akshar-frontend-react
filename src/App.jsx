@@ -16,7 +16,7 @@ import AdminDashboard from './pages/users/admin/AdminDashboard';
 import StudentDashboard from './pages/users/student/StudentDashboard';
 import TeacherDashboard from './pages/users/teacher/TeacherDashboard';
 import ManageDepartments from './pages/users/admin/ManageDepartments';
-import ConductLecture from './pages/users/teacher/lectures/ConductLecture';
+import ConductLecture from './pages/users/teacher/ConductLecture';
 import ClassRoomMapping from './pages/users/admin/ClassRoomMapping';
 
 function App() {

@@ -297,6 +297,43 @@ function AdminSidebar({ sidebarOpen, setSidebarOpen }) {
                 </NavLink>
               </li>
 
+              {/* Manage classroom mapping */}
+              <li
+                className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
+                  pathname.includes('inbox') && 'bg-slate-900'
+                }`}
+              >
+                <NavLink
+                  end
+                  to="/admin/classroom-mapping"
+                  className={`block text-slate-200 hover:text-white truncate transition duration-150 ${
+                    pathname.includes('inbox') && 'hover:text-slate-200'
+                  }`}
+                >
+                  <div className="flex items-center">
+                    <svg
+                      width="23"
+                      height="25"
+                      viewBox="0 0 23 25"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M1 3H23V23H1V3Z" fill="#475569" />
+                      <rect x="1" y="3" width="22" height="4" fill="#94A3B8" />
+                      <rect x="1" y="19" width="22" height="4" fill="#94A3B8" />
+                      <rect x="3" y="1" width="4" height="2" fill="#94A3B8" />
+                      <rect x="17" y="1" width="4" height="2" fill="#94A3B8" />
+                      <rect x="3" y="23" width="4" height="2" fill="#94A3B8" />
+                      <rect x="17" y="23" width="4" height="2" fill="#94A3B8" />
+                    </svg>
+
+                    <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                      Classroom Mapping
+                    </span>
+                  </div>
+                </NavLink>
+              </li>
+
               {/* Settings */}
               <SidebarLinkGroup activecondition={pathname.includes('settings')}>
                 {(handleClick, open) => {

@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import AdminSidebar from "../../../partials/AdminSidebar";
 import Header from "../../../partials/Header";
 import ClassRoomTable from "../../../partials/classroom/ClassRoomTable.jsx";
-import { getAllClassRoom } from "../../../apis/admin/classRoom.js";
+import {
+  getAllClassRoom,
+  getClassRoomDetails,
+} from "../../../apis/admin/classRoom.js";
 
 const ClassRoomMapping = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -20,7 +23,26 @@ const ClassRoomMapping = () => {
   };
 
   const classRoomChanged = async (classRoomId) => {
-    console.log(classRoomId);
+    const response = await getClassRoomDetails(classRoomId);
+    if (response.status) {
+      console.log(response.body);
+      setTopLeft({
+        long: response.body.topLeftLongitude,
+        lat: response.body.topLeftLatitude,
+      });
+      setTopRight({
+        long: response.body.topRightLongitude,
+        lat: response.body.topRightLatitude,
+      });
+      setBottomLeft({
+        long: response.body.bottomLeftLongitude,
+        lat: response.body.bottomLeftLatitude,
+      });
+      setBottomRight({
+        long: response.body.bottomRightLongitude,
+        lat: response.body.bottomRightLatitude,
+      });
+    }
   };
 
   useEffect(() => {
@@ -76,7 +98,7 @@ const ClassRoomMapping = () => {
                   <input
                     type="text"
                     disabled
-                    value={`${topLeft.lat}-${topLeft.lat}`}
+                    value={`${topLeft.long}-${topLeft.lat}`}
                     className="border border-gray-300 rounded-md p-2 w-60"
                   />
                   <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -89,7 +111,7 @@ const ClassRoomMapping = () => {
                   <input
                     type="text"
                     disabled
-                    value={`${topRight.lat}-${topRight.lat}`}
+                    value={`${topRight.long}-${topRight.lat}`}
                     className="border border-gray-300 rounded-md p-2 w-60"
                   />
                   <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -103,7 +125,7 @@ const ClassRoomMapping = () => {
                   <input
                     type="text"
                     disabled
-                    value={`${bottomLeft.lat}-${bottomLeft.lat}`}
+                    value={`${bottomLeft.long}-${bottomLeft.lat}`}
                     className="border border-gray-300 rounded-md p-2 w-60"
                   />
                   <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -115,7 +137,7 @@ const ClassRoomMapping = () => {
                   <input
                     type="text"
                     disabled
-                    value={`${bottomRight.lat}-${bottomRight.lat}`}
+                    value={`${bottomRight.long}-${bottomRight.lat}`}
                     className="border border-gray-300 rounded-md p-2 w-60"
                   />
                   <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

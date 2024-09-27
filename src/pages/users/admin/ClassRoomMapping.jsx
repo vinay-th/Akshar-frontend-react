@@ -1,11 +1,31 @@
-import React, { useState } from 'react';
-import AdminSidebar from '../../../partials/AdminSidebar';
-import Header from '../../../partials/Header';
-import ClassRoomTable from '../../../partials/classroom/ClassRoomTable.jsx';
+import React, { useEffect, useState } from "react";
+import AdminSidebar from "../../../partials/AdminSidebar";
+import Header from "../../../partials/Header";
+import ClassRoomTable from "../../../partials/classroom/ClassRoomTable.jsx";
+import { getAllClassRoom } from "../../../apis/admin/classRoom.js";
 
 const ClassRoomMapping = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [classrooms, setClassrooms] = useState([]);
+  const [topRight, setTopRight] = useState({ long: 0.0, lat: 0.0 });
+  const [topLeft, setTopLeft] = useState({ long: 0.0, lat: 0.0 });
+  const [bottomRight, setBottomRight] = useState({ long: 0.0, lat: 0.0 });
+  const [bottomLeft, setBottomLeft] = useState({ long: 0.0, lat: 0.0 });
 
+  const fetchClassrooms = async () => {
+    const response = await getAllClassRoom();
+    if (response.status) {
+      setClassrooms(response.body.classRoomList);
+    }
+  };
+
+  const classRoomChanged = async (classRoomId) => {
+    console.log(classRoomId);
+  };
+
+  useEffect(() => {
+    fetchClassrooms();
+  }, []);
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
@@ -23,11 +43,18 @@ const ClassRoomMapping = () => {
               <br />
               <br />
               <div className="flex justify-between">
-                <select className="border border-gray-300 w-40 rounded-md p-2">
+                <select
+                  className="border border-gray-300 w-40 rounded-md p-2"
+                  onChange={(event) => {
+                    classRoomChanged(event.target.value);
+                  }}
+                >
                   <option value="select">Select Class</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
+                  {classrooms.map((classroom) => (
+                    <option key={classroom.id} value={classroom.id}>
+                      {classroom.classRoomNumber}
+                    </option>
+                  ))}
                 </select>
                 <div className="flex justify-between">
                   <input
@@ -48,7 +75,8 @@ const ClassRoomMapping = () => {
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="---"
+                    disabled
+                    value={`${topLeft.lat}-${topLeft.lat}`}
                     className="border border-gray-300 rounded-md p-2 w-60"
                   />
                   <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -60,7 +88,8 @@ const ClassRoomMapping = () => {
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="---"
+                    disabled
+                    value={`${topRight.lat}-${topRight.lat}`}
                     className="border border-gray-300 rounded-md p-2 w-60"
                   />
                   <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -73,7 +102,8 @@ const ClassRoomMapping = () => {
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="---"
+                    disabled
+                    value={`${bottomLeft.lat}-${bottomLeft.lat}`}
                     className="border border-gray-300 rounded-md p-2 w-60"
                   />
                   <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -84,7 +114,8 @@ const ClassRoomMapping = () => {
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="---"
+                    disabled
+                    value={`${bottomRight.lat}-${bottomRight.lat}`}
                     className="border border-gray-300 rounded-md p-2 w-60"
                   />
                   <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

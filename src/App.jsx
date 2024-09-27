@@ -16,7 +16,8 @@ import AdminDashboard from './pages/users/admin/AdminDashboard';
 import StudentDashboard from './pages/users/student/StudentDashboard';
 import TeacherDashboard from './pages/users/teacher/TeacherDashboard';
 import ManageDepartments from './pages/users/admin/ManageDepartments';
-import Attendance from './pages/users/teacher/Attendance.jsx';
+import ConductLecture from './pages/users/teacher/lectures/ConductLecture';
+import ClassRoomMapping from './pages/users/admin/ClassRoomMapping';
 
 function App() {
   const location = useLocation();
@@ -37,6 +38,7 @@ function App() {
         <Route path="/admin" element={<AdminRoutes />}>
           <Route path="manageDepartments" element={<ManageDepartments />} />
           <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="classroom-mapping" element={<ClassRoomMapping />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
 
@@ -49,7 +51,7 @@ function App() {
         {/*Faculty routes*/}
         <Route path="/faculty" element={<TeacherRoutes />}>
           <Route path="dashboard" element={<TeacherDashboard />} />
-          <Route path="attendance" element={<Attendance />} />
+          <Route path="conduct-lecture" element={<ConductLecture />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />

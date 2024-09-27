@@ -69,14 +69,14 @@ export default function FacultyDashboardContainer() {
               {[
                 {
                   icon: 'fileText',
-                  text: 'Record Lecture Notes',
-                  link: 'lecture-notes',
+                  text: 'Conduct Lecture',
+                  link: 'conduct-lecture',
                 },
                 { icon: 'upload', text: 'Upload Notes', link: 'upload-notes' },
                 {
                   icon: 'star',
-                  text: 'Take Attendance',
-                  link: 'attendance',
+                  text: 'Quizes',
+                  link: 'quizes',
                 },
                 {
                   icon: 'helpCircle',
@@ -282,7 +282,7 @@ const StyledLectureDetails = styled.p`
 const StyledSOSButton = styled.button`
   position: fixed;
   bottom: 1rem;
-  right: 1rem;
+  right: 3rem;
   width: 150px;
   height: 50px;
   cursor: pointer;

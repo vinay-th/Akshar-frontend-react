@@ -75,8 +75,8 @@ export default function FacultyDashboardContainer() {
                 { icon: 'upload', text: 'Upload Notes', link: 'upload-notes' },
                 {
                   icon: 'star',
-                  text: 'Take Attendance',
-                  link: 'attendance',
+                  text: 'Conduct Lecture',
+                  link: 'conduct-lecture',
                 },
                 {
                   icon: 'helpCircle',

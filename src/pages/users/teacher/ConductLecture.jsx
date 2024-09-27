@@ -87,6 +87,9 @@ function ConductLecture() {
                   bottom: '20px',
                   left: '900px',
                 }}
+                onClick={() => {
+                  window.location.href = '/faculty/conducting-lecture';
+                }}
               >
                 Conduct Lecture
               </button>

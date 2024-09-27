@@ -3,6 +3,7 @@ import AdminSidebar from "../../../partials/AdminSidebar";
 import Header from "../../../partials/Header";
 import ClassRoomTable from "../../../partials/classroom/ClassRoomTable.jsx";
 import {
+  confirmGeoCoordinatesOfClassRoom,
   getAllClassRoom,
   getClassRoomDetails,
 } from "../../../apis/admin/classRoom.js";
@@ -14,6 +15,7 @@ const ClassRoomMapping = () => {
   const [topLeft, setTopLeft] = useState({ long: 0.0, lat: 0.0 });
   const [bottomRight, setBottomRight] = useState({ long: 0.0, lat: 0.0 });
   const [bottomLeft, setBottomLeft] = useState({ long: 0.0, lat: 0.0 });
+  const [currentClassRoom, setCurrentClassRoom] = useState(null);
 
   const fetchClassrooms = async () => {
     const response = await getAllClassRoom();
@@ -26,6 +28,7 @@ const ClassRoomMapping = () => {
     const response = await getClassRoomDetails(classRoomId);
     if (response.status) {
       console.log(response.body);
+      setCurrentClassRoom(response.body.id);
       setTopLeft({
         long: response.body.topLeftLongitude,
         lat: response.body.topLeftLatitude,
@@ -45,9 +48,46 @@ const ClassRoomMapping = () => {
     }
   };
 
+  const failedToGet = (error) => {
+    console.log(`Error: ${error.message}`);
+  };
+
+  // Handler to set the location for the given coordinate
+  const addLocation = (setCoordinate) => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setCoordinate({ lat: latitude, long: longitude });
+      },
+      failedToGet,
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      }
+    );
+  };
+
+  const handleOnConfirm = async () => {
+    const data = {
+      id: currentClassRoom,
+      topLeftLongitude: topLeft.long,
+      topLeftLatitude: topLeft.lat,
+      topRightLongitude: topRight.long,
+      topRightLatitude: topRight.lat,
+      bottomLeftLongitude: bottomLeft.long,
+      bottomLeftLatitude: bottomLeft.lat,
+      bottomRightLongitude: bottomRight.long,
+      bottomRightLatitude: bottomRight.lat,
+    };
+    const response = await confirmGeoCoordinatesOfClassRoom(data);
+    console.log(response);
+  };
+
   useEffect(() => {
     fetchClassrooms();
   }, []);
+
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
@@ -101,7 +141,10 @@ const ClassRoomMapping = () => {
                     value={`${topLeft.long}-${topLeft.lat}`}
                     className="border border-gray-300 rounded-md p-2 w-60"
                   />
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => addLocation(setTopLeft)}
+                  >
                     Add mapping
                   </button>
                 </div>
@@ -114,7 +157,10 @@ const ClassRoomMapping = () => {
                     value={`${topRight.long}-${topRight.lat}`}
                     className="border border-gray-300 rounded-md p-2 w-60"
                   />
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => addLocation(setTopRight)}
+                  >
                     Add mapping
                   </button>
                 </div>
@@ -122,6 +168,9 @@ const ClassRoomMapping = () => {
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-40"
                 style={{ position: "absolute", left: "550px", top: "275px" }}
+                onClick={() => {
+                  handleOnConfirm();
+                }}
               >
                 Confirm
               </button>
@@ -134,7 +183,10 @@ const ClassRoomMapping = () => {
                     value={`${bottomLeft.long}-${bottomLeft.lat}`}
                     className="border border-gray-300 rounded-md p-2 w-60"
                   />
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => addLocation(setBottomLeft)}
+                  >
                     Add mapping
                   </button>
                 </div>
@@ -146,7 +198,10 @@ const ClassRoomMapping = () => {
                     value={`${bottomRight.long}-${bottomRight.lat}`}
                     className="border border-gray-300 rounded-md p-2 w-60"
                   />
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => addLocation(setBottomRight)}
+                  >
                     Add mapping
                   </button>
                 </div>

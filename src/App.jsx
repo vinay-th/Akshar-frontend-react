@@ -16,6 +16,7 @@ import AdminDashboard from './pages/users/admin/AdminDashboard';
 import StudentDashboard from './pages/users/student/StudentDashboard';
 import TeacherDashboard from './pages/users/teacher/TeacherDashboard';
 import ManageDepartments from './pages/users/admin/ManageDepartments';
+import Attendance from './pages/users/teacher/Attendance.jsx';
 
 function App() {
   const location = useLocation();
@@ -48,6 +49,7 @@ function App() {
         {/*Faculty routes*/}
         <Route path="/faculty" element={<TeacherRoutes />}>
           <Route path="dashboard" element={<TeacherDashboard />} />
+          <Route path="attendance" element={<Attendance />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />

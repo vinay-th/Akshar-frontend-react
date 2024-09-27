@@ -67,14 +67,27 @@ export default function FacultyDashboardContainer() {
             <StyledCardTitle>Quick Actions</StyledCardTitle>
             <StyledQuickActions>
               {[
-                { icon: 'fileText', text: 'Record Lecture Notes' },
-                { icon: 'upload', text: 'Upload Notes' },
-                { icon: 'star', text: 'View Feedback' },
-                { icon: 'helpCircle', text: 'Create Quiz' },
+                {
+                  icon: 'fileText',
+                  text: 'Record Lecture Notes',
+                  link: 'lecture-notes',
+                },
+                { icon: 'upload', text: 'Upload Notes', link: 'upload-notes' },
+                {
+                  icon: 'star',
+                  text: 'Take Attendance',
+                  link: 'attendance',
+                },
+                {
+                  icon: 'helpCircle',
+                  text: 'Create Quiz',
+                  link: 'create-quiz',
+                },
               ].map((action) => (
                 <StyledQuickActionButton
                   key={action.text}
                   className="quick-action-button"
+                  onClick={() => (window.location.href = action.link)}
                 >
                   <Icon name={action.icon} className="h-8 w-8 mb-2" />
                   {action.text}

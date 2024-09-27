@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import AdminSidebar from "../../../partials/AdminSidebar";
-import Header from "../../../partials/Header";
-import ClassRoomTable from "../../../partials/classroom/ClassRoomTable.jsx";
-import { getAllClassRoom } from "../../../apis/admin/classRoom.js";
+import React, { useEffect, useState } from 'react';
+import AdminSidebar from '../../../partials/AdminSidebar';
+import Header from '../../../partials/Header';
+import ClassRoomTable from '../../../partials/classroom/ClassRoomTable.jsx';
+import { getAllClassRoom } from '../../../apis/admin/classRoom.js';
 
 const ClassRoomMapping = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -97,6 +97,12 @@ const ClassRoomMapping = () => {
                   </button>
                 </div>
               </div>
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-40"
+                style={{ position: 'absolute', left: '550px', top: '275px' }}
+              >
+                Confirm
+              </button>
               <div className="flex justify-between">
                 {/* bottom left corner */}
                 <div className="flex gap-2">

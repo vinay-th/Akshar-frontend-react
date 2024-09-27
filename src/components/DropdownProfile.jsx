@@ -1,15 +1,29 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import Transition from '../utils/Transition';
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Transition from "../utils/Transition";
 
-import UserAvatar from '../images/user-avatar-32.png';
+import UserAvatar from "../images/user-avatar-32.png";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserDetails } from "../apis/userDetails";
+import { userDetailsActions } from "../store/userDetails";
+import { logout } from "../apis/login";
 
 function DropdownProfile({ align }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
+  const { username, role } = useSelector((store) => store.userDetailStore);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const fetchUserDetails = async () => {
+    const response = await getUserDetails();
+
+    if (response.status) {
+      dispatch(userDetailsActions.saveUsername(response.body));
+    }
+  };
   // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }) => {
@@ -22,8 +36,9 @@ function DropdownProfile({ align }) {
         return;
       setDropdownOpen(false);
     };
-    document.addEventListener('click', clickHandler);
-    return () => document.removeEventListener('click', clickHandler);
+    fetchUserDetails();
+    document.addEventListener("click", clickHandler);
+    return () => document.removeEventListener("click", clickHandler);
   });
 
   // close if the esc key is pressed
@@ -32,9 +47,16 @@ function DropdownProfile({ align }) {
       if (!dropdownOpen || keyCode !== 27) return;
       setDropdownOpen(false);
     };
-    document.addEventListener('keydown', keyHandler);
-    return () => document.removeEventListener('keydown', keyHandler);
+    document.addEventListener("keydown", keyHandler);
+    return () => document.removeEventListener("keydown", keyHandler);
   });
+
+  const handleLogout = async () => {
+    const response = await logout();
+    if (response.status) {
+      navigate("/login");
+    }
+  };
 
   return (
     <div className="relative inline-flex">
@@ -54,7 +76,7 @@ function DropdownProfile({ align }) {
         />
         <div className="flex items-center truncate">
           <span className="truncate ml-2 text-sm font-medium group-hover:text-slate-800">
-            Acme Inc.
+            {username}
           </span>
           <svg
             className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
@@ -67,7 +89,7 @@ function DropdownProfile({ align }) {
 
       <Transition
         className={`origin-top-right z-10 absolute top-full min-w-44 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1 ${
-          align === 'right' ? 'right-0' : 'left-0'
+          align === "right" ? "right-0" : "left-0"
         }`}
         show={dropdownOpen}
         enter="transition ease-out duration-200 transform"
@@ -83,8 +105,8 @@ function DropdownProfile({ align }) {
           onBlur={() => setDropdownOpen(false)}
         >
           <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200">
-            <div className="font-medium text-slate-800">Acme Inc.</div>
-            <div className="text-xs text-slate-500 italic">Administrator</div>
+            <div className="font-medium text-slate-800">{username}</div>
+            <div className="text-xs text-slate-500 italic">{role}</div>
           </div>
           <ul>
             <li>
@@ -100,7 +122,7 @@ function DropdownProfile({ align }) {
               <Link
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
                 to="/login"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
+                onClick={handleLogout}
               >
                 Sign Out
               </Link>

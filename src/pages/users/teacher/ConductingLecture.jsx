@@ -1,43 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom"; // Import useParams
+import { useParams, useNavigate } from "react-router-dom"; // Import useParams and useNavigate
 import FacultySidebar from "../../../partials/FacultySidebar";
 import Header from "../../../partials/Header";
 import AttendanceTable from "../../../partials/attendance/AttendanceTable";
 import FacultyLectureAttendanceBanner from "../../../partials/dashboard/FacultyLectureAttendanceBanner";
+import { getStudentForCurrentLecture } from "../../../apis/teacher/conductingLecture";
 
 // Mock data for testing
-const mockStudents = [
-  { id: 1, name: "John Doe", enrollmentNo: "A001", status: "Present" },
-  { id: 2, name: "Jane Smith", enrollmentNo: "A002", status: "Absent" },
-  { id: 3, name: "Bob Johnson", enrollmentNo: "A003", status: "Present" },
-];
 
 function ConductingLecture() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [students, setStudents] = useState([]);
+
   const [error, setError] = useState(null);
 
-  const { lectureId } = useParams(); // Retrieve lectureId from URL parameters
+  const { lectureId: paramLectureId } = useParams(); // Retrieve lectureId from URL parameters
+  const navigate = useNavigate();
+  const lectureId = localStorage.getItem("lectureId") || paramLectureId; // Get lectureId from localStorage or URL
 
   useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        // Uncomment the following lines when your API is ready
-        // const response = await fetch(`/api/students?lectureId=${lectureId}`);
-        // const data = await response.json();
-        // setStudents(data);
+    if (!lectureId) {
+      // If lectureId is not found, redirect to Conduct Lecture page
+      navigate("/faculty/conduct-lecture");
+    } else {
+      // Fetch students if lectureId exists
+      const fetchStudents = async () => {
+        try {
+        } catch (error) {
+          console.error("Error fetching students:", error);
+          setError("Failed to load students. Please try again later.");
+        }
+      };
 
-        // For now, use mock data
-        console.log("Lecture ID:", lectureId); // Log the lectureId for testing
-        setStudents(mockStudents);
-      } catch (error) {
-        console.error("Error fetching students:", error);
-        setError("Failed to load students. Please try again later.");
-      }
-    };
-
-    fetchStudents();
-  }, [lectureId]); // Add lectureId as a dependency
+      fetchStudents();
+    }
+  }, [lectureId, navigate]); // Add lectureId and navigate as dependencies
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -45,7 +41,6 @@ function ConductingLecture() {
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
       />
-
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main>
@@ -54,7 +49,7 @@ function ConductingLecture() {
           {error ? (
             <div className="p-4 text-red-500">{error}</div>
           ) : (
-            <AttendanceTable initialStudents={students} />
+            <AttendanceTable />
           )}
         </main>
       </div>

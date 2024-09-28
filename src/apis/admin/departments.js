@@ -16,8 +16,8 @@ export const getAllDepartment = async () => {
   return response.json();
 };
 
-export const checkForDepartmentIdAvail = async (departmentId,id) => {
-  const data = { departmentId,id };
+export const checkForDepartmentIdAvail = async (departmentId, id) => {
+  const data = { departmentId, id };
   const response = await fetch(
     GLOBAL_URL + "admin/department/checkForDepartmentIdAvail",
     {
@@ -37,83 +37,97 @@ export const checkForDepartmentIdAvail = async (departmentId,id) => {
   return response.json();
 };
 
-export const updateDepartment = async ({id,departmentId,departmentName,departmentShortName,teacherInfo}) => {
-    const data={
-        id,
-        departmentId,
-        departmentName,
-        departmentShortName,
-        teacherInfo
+export const updateDepartment = async ({
+  id,
+  departmentId,
+  departmentName,
+  departmentShortName,
+  teacherInfo,
+}) => {
+  const data = {
+    id,
+    departmentId,
+    departmentName,
+    departmentShortName,
+    teacherInfo,
+  };
+  const response = await fetch(
+    GLOBAL_URL + "admin/department/updateDepartment",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+      credentials: "include",
     }
-    const response = await fetch(
-        GLOBAL_URL + "admin/department/updateDepartment",
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-            credentials: "include",
-        }
-    );
+  );
 
-    if (!response.ok) {
-        alert("Invalid Username or password");
-        throw new Error("Network response was not ok");
-    }
-    return response.json();
+  if (!response.ok) {
+    alert("Invalid Username or password");
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
 };
 
-export const removeDepartment = async ({id,departmentId,departmentName,departmentShortName,teacherInfo}) => {
-    const data={
-        id,
-        departmentId,
-        departmentName,
-        departmentShortName,
-        teacherInfo
+export const removeDepartment = async ({
+  id,
+  departmentId,
+  departmentName,
+  departmentShortName,
+  teacherInfo,
+}) => {
+  const data = {
+    id,
+    departmentId,
+    departmentName,
+    departmentShortName,
+    teacherInfo,
+  };
+  const response = await fetch(
+    GLOBAL_URL + "admin/department/deleteDepartment",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+      credentials: "include",
     }
-    const response = await fetch(
-        GLOBAL_URL + "admin/department/deleteDepartment",
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-            credentials: "include",
-        }
-    );
+  );
 
-    if (!response.ok) {
-        alert("Invalid Username or password");
-        throw new Error("Network response was not ok");
-    }
-    return response.json();
+  if (!response.ok) {
+    alert("Invalid Username or password");
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
 };
 
+export const createDepartment = async ({
+  id,
+  departmentId,
+  departmentName,
+  departmentShortName,
+  teacherInfo,
+}) => {
+  const data = {
+    id,
+    departmentId,
+    departmentName,
+    departmentShortName,
+  };
+  const response = await fetch(GLOBAL_URL + "admin/department/addDepartment", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+    credentials: "include",
+  });
 
-export const createDepartment = async ({id,departmentId,departmentName,departmentShortName,teacherInfo}) => {
-    const data={
-        id,
-        departmentId,
-        departmentName,
-        departmentShortName
-    }
-    const response = await fetch(
-        GLOBAL_URL + "admin/department/addDepartment",
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-            credentials: "include",
-        }
-    );
-
-    if (!response.ok) {
-        alert("Invalid Username or password");
-        throw new Error("Network response was not ok");
-    }
-    return response.json();
+  if (!response.ok) {
+    alert("Invalid Username or password");
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
 };

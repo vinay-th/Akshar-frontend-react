@@ -23,10 +23,6 @@ function AdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { username, role } = useSelector((store) => store.userDetailStore);
 
-  if (!username) {
-    return <div>Loading...</div>; // Or a more sophisticated loading component
-  }
-
   return (
     <div className="flex h-screen overflow-hidden">
       {/* AdminSidebar */}

@@ -17,6 +17,7 @@ import StudentDashboard from './pages/users/student/StudentDashboard';
 import TeacherDashboard from './pages/users/teacher/TeacherDashboard';
 import ManageDepartments from './pages/users/admin/ManageDepartments';
 import ConductLecture from './pages/users/teacher/ConductLecture';
+import ConductingLecture from './pages/users/teacher/ConductingLecture';
 import ClassRoomMapping from './pages/users/admin/ClassRoomMapping';
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
         <Route path="/faculty" element={<TeacherRoutes />}>
           <Route path="dashboard" element={<TeacherDashboard />} />
           <Route path="conduct-lecture" element={<ConductLecture />} />
+          <Route path="conducting-lecture" element={<ConductingLecture />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />

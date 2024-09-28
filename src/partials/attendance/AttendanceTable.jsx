@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AttendanceTableItem from './AttendanceTableItem';
 
+import DoughnutChart from '../../charts/DoughnutChart';
+
 function AttendanceTable({ selectedItems }) {
   //   const { attendanceList, numberOfAttendance } = useSelector(
   //     (store) => store.attendanceStore
@@ -52,43 +54,53 @@ function AttendanceTable({ selectedItems }) {
       id: 1,
       enrollmentNo: 'EN001',
       name: 'John Doe',
-      course: 'Computer Science',
-      batch: '2023A',
       status: 'Present',
     },
     {
       id: 2,
       enrollmentNo: 'EN002',
       name: 'Jane Smith',
-      course: 'Electrical Engineering',
-      batch: '2023B',
       status: 'Absent',
     },
     {
       id: 3,
       enrollmentNo: 'EN003',
       name: 'Mike Johnson',
-      course: 'Mechanical Engineering',
-      batch: '2023A',
       status: 'Present',
     },
     {
       id: 4,
       enrollmentNo: 'EN004',
       name: 'Emily Brown',
-      course: 'Civil Engineering',
-      batch: '2023B',
       status: 'Present',
     },
     {
       id: 5,
       enrollmentNo: 'EN005',
       name: 'Chris Wilson',
-      course: 'Information Technology',
-      batch: '2023A',
       status: 'Absent',
     },
   ];
+
+  const presentCount = attendanceList.filter(
+    (attendance) => attendance.status === 'Present'
+  ).length;
+  const absentCount = attendanceList.filter(
+    (attendance) => attendance.status === 'Absent'
+  ).length;
+
+  const chartData = {
+    labels: ['Present', 'Absent'],
+    datasets: [
+      {
+        label: 'My Dataset',
+        data: [presentCount, absentCount],
+        backgroundColor: ['#FF6384', '#36A2EB'],
+        hoverBackgroundColor: ['#FF6384', '#36A2EB'],
+        borderWidth: 1,
+      },
+    ],
+  };
 
   return (
     <div className="bg-white shadow-lg rounded-sm border border-slate-200 relative">
@@ -107,6 +119,9 @@ function AttendanceTable({ selectedItems }) {
         editAttendanceVo={editAttendanceVo}
       ></AttendanceEditModel> */}
       <div>
+        <div style={{ position: 'absolute', top: '-200px', left: '55%' }}>
+          <DoughnutChart data={chartData} width={120} height={120} />
+        </div>
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="table-auto w-full">
@@ -133,13 +148,12 @@ function AttendanceTable({ selectedItems }) {
                   <div className="font-semibold text-left">Name</div>
                 </th>
                 <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Course</div>
+                  <div className="font-semibold text-left">Status</div>
                 </th>
                 <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Batch</div>
-                </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Attendance</div>
+                  <div className="font-semibold text-left">
+                    Manual Attendance
+                  </div>
                 </th>
               </tr>
             </thead>
@@ -152,8 +166,6 @@ function AttendanceTable({ selectedItems }) {
                     id={attendance.id}
                     enrollmentNo={attendance.enrollmentNo}
                     name={attendance.name}
-                    course={attendance.course}
-                    batch={attendance.batch}
                     status={attendance.status}
                   />
                 );

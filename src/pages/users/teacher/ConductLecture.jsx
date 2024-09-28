@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import FacultySidebar from "../../../partials/FacultySidebar";
-import Header from "../../../partials/Header";
-import AttendanceTable from "../../../partials/attendance/AttendanceTable";
+import React, { useEffect, useState } from 'react';
+import FacultySidebar from '../../../partials/FacultySidebar';
+import Header from '../../../partials/Header';
+import AttendanceTable from '../../../partials/attendance/AttendanceTable';
 import {
   getAllBatchsForTeacher,
   getAllCoursesForTeacher,
   getAllSubjectForTeacher,
   getClassRoomsForTeachers,
   getSectionForTeacher,
-} from "../../../apis/teacher/conductLecture";
-import { getClassRoomDetails } from "../../../apis/admin/classRoom";
-import { conductLectureAPI } from "../../../apis/teacher/conductLecture"; // Import your API function for the POST request
-import { useSelector } from "react-redux";
+} from '../../../apis/teacher/conductLecture';
+import { getClassRoomDetails } from '../../../apis/admin/classRoom';
+import { conductLectureAPI } from '../../../apis/teacher/conductLecture'; // Import your API function for the POST request
+import { useSelector } from 'react-redux';
 
 function ConductLecture() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -19,15 +19,15 @@ function ConductLecture() {
 
   // States for each field
   const [courses, setCourses] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState('');
   const [batches, setBatches] = useState([]);
-  const [selectedBatch, setSelectedBatch] = useState("");
+  const [selectedBatch, setSelectedBatch] = useState('');
   const [sections, setSections] = useState([]);
-  const [selectedSection, setSelectedSection] = useState("");
+  const [selectedSection, setSelectedSection] = useState('');
   const [classrooms, setClassrooms] = useState([]);
-  const [selectedClassroom, setSelectedClassroom] = useState("");
+  const [selectedClassroom, setSelectedClassroom] = useState('');
   const [subjects, setSubjects] = useState([]);
-  const [selectedSubject, setSelectedSubject] = useState(""); // Replace with actual teacher ID from your context or auth state
+  const [selectedSubject, setSelectedSubject] = useState(''); // Replace with actual teacher ID from your context or auth state
   // Fetch courses (example function, replace with actual API call)
   const fetchCourses = async () => {
     const response = await getAllCoursesForTeacher();
@@ -58,7 +58,7 @@ function ConductLecture() {
 
   const fetchSubjects = async (sectionId) => {
     const response = await getAllSubjectForTeacher({ id: sectionId });
-    console.log(response, "subjects");
+    console.log(response, 'subjects');
     setSubjects(response.body.subjectList);
   };
 
@@ -114,13 +114,13 @@ function ConductLecture() {
 
       if (response.ok) {
         // Handle success (optional)
-        console.log("Lecture conducted successfully!");
+        console.log('Lecture conducted successfully!');
       } else {
         // Handle error (optional)
-        console.error("Error conducting lecture:", response.statusText);
+        console.error('Error conducting lecture:', response.statusText);
       }
     } catch (error) {
-      console.error("API call failed:", error);
+      console.error('API call failed:', error);
     }
   };
 
@@ -139,14 +139,14 @@ function ConductLecture() {
 
         <main>
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            <div className="gap-4" style={{ width: "700px" }}>
+            <div className="gap-4" style={{ width: '700px' }}>
               <h1 className="text-2xl font-semibold">Conduct Lecture</h1>
               <div className="flex flex-col gap-4 justify-between mt-10">
                 {/* Select Course */}
                 <div className="gap-2">
                   <h1
                     className="font-bold text-xl"
-                    style={{ fontSize: "1.5rem", color: "#6366F1" }}
+                    style={{ fontSize: '1.5rem', color: '#6366F1' }}
                   >
                     Select Course
                   </h1>
@@ -168,7 +168,7 @@ function ConductLecture() {
                 <div className="gap-2">
                   <h1
                     className="font-bold text-xl"
-                    style={{ fontSize: "1.5rem", color: "#6366F1" }}
+                    style={{ fontSize: '1.5rem', color: '#6366F1' }}
                   >
                     Select Batch
                   </h1>
@@ -190,7 +190,7 @@ function ConductLecture() {
                 <div className="gap-2">
                   <h1
                     className="font-bold text-xl"
-                    style={{ fontSize: "1.5rem", color: "#6366F1" }}
+                    style={{ fontSize: '1.5rem', color: '#6366F1' }}
                   >
                     Select Section
                   </h1>
@@ -212,7 +212,7 @@ function ConductLecture() {
                 <div className="gap-2">
                   <h1
                     className="font-bold text-xl"
-                    style={{ fontSize: "1.5rem", color: "#6366F1" }}
+                    style={{ fontSize: '1.5rem', color: '#6366F1' }}
                   >
                     Select Classroom
                   </h1>
@@ -234,7 +234,7 @@ function ConductLecture() {
                 <div className="gap-2">
                   <h1
                     className="font-bold text-xl"
-                    style={{ fontSize: "1.5rem", color: "#6366F1" }}
+                    style={{ fontSize: '1.5rem', color: '#6366F1' }}
                   >
                     Select Subject
                   </h1>
@@ -251,17 +251,10 @@ function ConductLecture() {
                     ))}
                   </select>
                 </div>
-
-                {/* Button to Conduct Lecture */}
-                <button
-                  onClick={conductLecture}
-                  className="mt-4 bg-blue-600 text-white rounded-md p-2"
-                >
-                  Conduct Lecture
-                </button>
               </div>
             </div>
-
+<<<<<<< HEAD
+=======
             <div className="flex justify-center items-center">
               <button
                 className="text-white px-4 py-2 rounded-md"
@@ -273,7 +266,7 @@ function ConductLecture() {
                   left: "900px",
                 }}
                 onClick={() => {
-                  window.location.href = "/faculty/conducting-lecture";
+                  window.location.href = '/faculty/conducting-lecture';
                 }}
               >
                 Conduct Lecture

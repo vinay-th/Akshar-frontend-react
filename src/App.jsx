@@ -53,10 +53,7 @@ function App() {
         <Route path="/faculty" element={<TeacherRoutes />}>
           <Route path="dashboard" element={<TeacherDashboard />} />
           <Route path="conduct-lecture" element={<ConductLecture />} />
-          <Route
-            path="conductingLecture/:lectureId"
-            element={<ConductingLecture />}
-          />
+          <Route path="conducting-lecture" element={<ConductingLecture />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />

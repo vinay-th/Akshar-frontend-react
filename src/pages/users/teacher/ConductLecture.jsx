@@ -111,6 +111,8 @@ function ConductLecture() {
   };
 
   // Conduct Lecture POST method
+
+  // Conduct Lecture POST method
   const conductLecture = async () => {
     const lectureDTO = {
       courseId: selectedCourse,
@@ -125,13 +127,15 @@ function ConductLecture() {
       const response = await conductLectureAPI(lectureDTO);
 
       if (response.status && response.body && response.body.id) {
-        // Extract the lecture ID from the response
         const lectureId = response.body.id;
 
-        // Navigate to the new page with lectureId as state or URL parameter
-        navigate(`/faculty/conducting-lecture`, { state: { lectureId } });
+        // Store lectureId in localStorage
+        localStorage.setItem("lectureId", lectureId);
+
+        // Navigate to the conducting lecture page
+        navigate(`/faculty/conducting-lecture`);
       } else {
-        console.error("Error conducting lecture:", response.statusText);
+        console.error("Error conducting lecture:", response);
       }
     } catch (error) {
       console.error("API call failed:", error);

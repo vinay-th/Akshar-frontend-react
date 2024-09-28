@@ -1,35 +1,39 @@
-import React from 'react';
+import React from "react";
 
 function ClassroomTableItem(props) {
   const totalColor = (status) => {
     switch (status) {
-      case 'Paid':
-        return 'text-emerald-500';
-      case 'Due':
-        return 'text-amber-500';
-      case 'Overdue':
-        return 'text-rose-500';
+      case "Paid":
+        return "text-emerald-500";
+      case "Due":
+        return "text-amber-500";
+      case "Overdue":
+        return "text-rose-500";
       default:
-        return 'text-slate-500';
+        return "text-slate-500";
     }
   };
 
   const statusColor = (status) => {
     switch (status) {
-      case 'Paid':
-        return 'bg-emerald-100 text-emerald-600';
-      case 'Due':
-        return 'bg-amber-100 text-amber-600';
-      case 'Overdue':
-        return 'bg-rose-100 text-rose-500';
+      case "Paid":
+        return "bg-emerald-100 text-emerald-600";
+      case "Due":
+        return "bg-amber-100 text-amber-600";
+      case "Overdue":
+        return "bg-rose-100 text-rose-500";
       default:
-        return 'bg-slate-100 text-slate-500';
+        return "bg-slate-100 text-slate-500";
     }
+  };
+
+  const handleDeleteClassRoom = () => {
+    props.onDeleteClassRoom(props.id);
   };
 
   const typeIcon = (type) => {
     switch (type) {
-      case 'Subscription':
+      case "Subscription":
         return (
           <svg
             className="w-4 h-4 fill-current text-slate-400 shrink-0 mr-2"
@@ -52,22 +56,8 @@ function ClassroomTableItem(props) {
 
   return (
     <tr>
-      <td className="px-3 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-        <div className="flex items-center">
-          <label className="inline-flex">
-            <span className="sr-only">Select</span>
-            <input
-              id={props.id}
-              className="form-checkbox"
-              type="checkbox"
-              onChange={props.handleClick}
-              checked={props.isChecked}
-            />
-          </label>
-        </div>
-      </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div className="font-medium text-sky-500">#{props.id}</div>
+        <div className="font-medium text-sky-500">#{props.sr}</div>
       </td>
       <td className="px-1 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className={`font-medium text-slate-800`}>{props.name}</div>
@@ -114,7 +104,12 @@ function ClassroomTableItem(props) {
       </td>
       <td className="px-3 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
         <div className="space-x-1">
-          <button className="text-rose-500 hover:text-rose-600 rounded-full">
+          <button
+            className="text-rose-500 hover:text-rose-600 rounded-full"
+            onClick={() => {
+              handleDeleteClassRoom();
+            }}
+          >
             <span className="sr-only">Delete</span>
             <svg className="w-8 h-8 fill-current" viewBox="0 0 32 32">
               <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />

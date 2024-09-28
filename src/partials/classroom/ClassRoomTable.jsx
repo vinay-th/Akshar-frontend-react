@@ -1,7 +1,11 @@
-import React from 'react';
-import ClassroomTableItem from './ClassroomTableItem.jsx';
+import React from "react";
+import ClassroomTableItem from "./ClassroomTableItem.jsx";
+import {
+  deleteClassRoom,
+  getAllClassRoom,
+} from "../../apis/admin/classRoom.js";
 
-function ClassroomTable() {
+function ClassroomTable(props) {
   //   const { classroomList, numberOfClassroom } = useSelector(
   //     (store) => store.classroomStore
   //   );
@@ -46,62 +50,23 @@ function ClassroomTable() {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [isCheck]);
 
-  const classroomList = [
-    {
-      id: 1,
-      name: 'Classroom 1',
-      topLeftLatitude: '23.780884',
-      topLeftLongitude: '90.356835',
-      topRightLatitude: '23.780884',
-      topRightLongitude: '90.356835',
-      bottomLeftLatitude: '23.780884',
-      bottomLeftLongitude: '90.356835',
-      bottomRightLatitude: '23.780884',
-      bottomRightLongitude: '90.356835',
-    },
-    {
-      id: 2,
-      name: 'Classroom 2',
-      topLeftLatitude: '23.780884',
-      topLeftLongitude: '90.356835',
-      topRightLatitude: '23.780884',
-      topRightLongitude: '90.356835',
-      bottomLeftLatitude: '23.780884',
-      bottomLeftLongitude: '90.356835',
-      bottomRightLatitude: '23.780884',
-      bottomRightLongitude: '90.356835',
-    },
-    {
-      id: 3,
-      name: 'Classroom 3',
-      topLeftLatitude: '23.780884',
-      topLeftLongitude: '90.356835',
-      topRightLatitude: '23.780884',
-      topRightLongitude: '90.356835',
-      bottomLeftLatitude: '23.780884',
-      bottomLeftLongitude: '90.356835',
-      bottomRightLatitude: '23.780884',
-      bottomRightLongitude: '90.356835',
-    },
-    {
-      id: 4,
-      name: 'Classroom 4',
-      topLeftLatitude: '23.780884',
-      topLeftLongitude: '90.356835',
-      topRightLatitude: '23.780884',
-      topRightLongitude: '90.356835',
-      bottomLeftLatitude: '23.780884',
-      bottomLeftLongitude: '90.356835',
-      bottomRightLatitude: '23.780884',
-      bottomRightLongitude: '90.356835',
-    },
-  ];
+  const fetchClassrooms = async () => {
+    const response = await getAllClassRoom();
+    if (response.status) {
+      props.setClassrooms(response.body.classRoomList);
+    }
+  };
+
+  const onDeleteClassRoom = async (id) => {
+    const response = await deleteClassRoom({ id });
+    fetchClassrooms();
+  };
 
   return (
     <div className="bg-white shadow-lg rounded-sm border border-slate-200 relative">
       <header className="px-3 py-4">
         <h2 className="font-semibold text-slate-800">
-          Classrooms{' '}
+          Classrooms{" "}
           {/* <span className="text-slate-400 font-medium">
             {' '}
             {numberOfClassroom}
@@ -120,19 +85,6 @@ function ClassroomTable() {
             {/* Table header */}
             <thead className="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
               <tr>
-                <th className="px-3 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                  <div className="flex items-center">
-                    {/* <label className="inline-flex">
-                      <span className="sr-only">Select all</span>
-                      <input
-                        className="form-checkbox"
-                        type="checkbox"
-                        checked={selectAll}
-                        onChange={handleSelectAll}
-                      />
-                    </label> */}
-                  </div>
-                </th>
                 <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                   <div className="font-semibold text-left">Serial No</div>
                 </th>
@@ -186,12 +138,14 @@ function ClassroomTable() {
             </thead>
             {/* Table body */}
             <tbody className="text-sm divide-y divide-slate-200">
-              {classroomList.map((classroom) => {
+              {props.classrooms.map((classroom, index) => {
                 return (
                   <ClassroomTableItem
+                    onDeleteClassRoom={onDeleteClassRoom}
                     key={classroom.id}
                     id={classroom.id}
-                    name={classroom.name}
+                    sr={index + 1}
+                    name={classroom.classRoomNumber}
                     topLeftLatitude={classroom.topLeftLatitude}
                     topLeftLongitude={classroom.topLeftLongitude}
                     topRightLatitude={classroom.topRightLatitude}

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import AttendanceTableItem from "./AttendanceTableItem";
-import DoughnutChart from "../../charts/DoughnutChart";
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import AttendanceTableItem from './AttendanceTableItem';
+import DoughnutChart from '../../charts/DoughnutChart';
 import {
   getStudentForCurrentLecture,
   markAttendence,
-} from "../../apis/teacher/conductingLecture";
+} from '../../apis/teacher/conductingLecture';
 
 function AttendanceTable({ selectedItems }) {
   const [attendanceList, setAttendanceList] = useState([]);
@@ -13,11 +13,11 @@ function AttendanceTable({ selectedItems }) {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const lectureId = localStorage.getItem("lectureId");
+        const lectureId = localStorage.getItem('lectureId');
         const response = await getStudentForCurrentLecture({ id: lectureId });
         setAttendanceList(response.body.studentList);
       } catch (error) {
-        console.error("Error fetching students:", error);
+        console.error('Error fetching students:', error);
       }
     };
 
@@ -41,20 +41,20 @@ function AttendanceTable({ selectedItems }) {
   };
 
   const presentCount = attendanceList.filter(
-    (attendance) => attendance.attendanceStatus === "Present"
+    (attendance) => attendance.attendanceStatus === 'Present'
   ).length;
   const absentCount = attendanceList.filter(
-    (attendance) => attendance.attendanceStatus === "Absent"
+    (attendance) => attendance.attendanceStatus === 'Absent'
   ).length;
 
   const chartData = {
-    labels: ["Present", "Absent"],
+    labels: ['Present', 'Absent'],
     datasets: [
       {
-        label: "Attendance",
+        label: 'My Dataset',
         data: [presentCount, absentCount],
-        backgroundColor: ["#FF6384", "#36A2EB"],
-        hoverBackgroundColor: ["#FF6384", "#36A2EB"],
+        backgroundColor: ['#FF6384', '#36A2EB'],
+        hoverBackgroundColor: ['#FF6384', '#36A2EB'],
         borderWidth: 1,
       },
     ],
@@ -67,7 +67,8 @@ function AttendanceTable({ selectedItems }) {
       </header>
 
       <div>
-        <div style={{ position: "absolute", top: "-200px", left: "55%" }}>
+        <div style={{ position: 'absolute', top: '-200px', left: '55%' }}>
+          {/* Fix: Correct usage of DoughnutChart component */}
           <DoughnutChart data={chartData} width={120} height={120} />
         </div>
 

@@ -28,12 +28,12 @@ function Signin() {
       if (response.status) {
         setUserRole(response.body.role);
         setUsername(response.body.username);
-        console.log(response);
         if (response.body.role === 'ADMIN') {
           navigate('/admin/dashboard');
         } else if (response.body.role === 'TEACHER') {
           navigate('/faculty/dashboard');
-        } else if (response.body.role === 'STUDENT');
+        }
+        if (response.body.role === 'STUDENT');
         {
           navigate('/student/dashboard');
         }

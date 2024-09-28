@@ -5,6 +5,7 @@ import Header from "../../../partials/Header";
 import AttendanceTable from "../../../partials/attendance/AttendanceTable";
 import FacultyLectureAttendanceBanner from "../../../partials/dashboard/FacultyLectureAttendanceBanner";
 import { getStudentForCurrentLecture } from "../../../apis/teacher/conductingLecture";
+import DoughnutChart from "../../../charts/DoughnutChart";
 
 // Mock data for testing
 
@@ -33,7 +34,9 @@ function ConductingLecture() {
 
       fetchStudents();
     }
-  }, [lectureId, navigate]); // Add lectureId and navigate as dependencies
+  }, [lectureId, navigate]);
+
+//  dd lectureId and navigate as dependencies
 
   return (
     <div className="flex h-screen overflow-hidden">

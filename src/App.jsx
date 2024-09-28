@@ -20,6 +20,7 @@ import ConductingLecture from './pages/users/teacher/ConductingLecture';
 import AttendLecture from './pages/users/student/AttendLecture.jsx';
 import ClassRoomMapping from './pages/users/admin/ClassRoomMapping';
 import Whiteboard from './pages/users/teacher/Whiteboard';
+import Chatbot from './pages/users/student/Chatbot.jsx';
 function App() {
   const location = useLocation();
 
@@ -47,6 +48,7 @@ function App() {
         <Route path="/student" element={<StudentRoutes />}>
           <Route path="dashboard" element={<StudentDashboard />} />
           <Route path="attend-lecture" element={<AttendLecture />} />
+          <Route path="chat-with-ai" element={<Chatbot />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
 

@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
 import AttendanceTableItem from './AttendanceTableItem';
 import DoughnutChart from '../../charts/DoughnutChart';
 import {
@@ -7,8 +6,12 @@ import {
   markAttendence,
 } from '../../apis/teacher/conductingLecture';
 
-function AttendanceTable({ selectedItems }) {
+function AttendanceTable() {
   const [attendanceList, setAttendanceList] = useState([]);
+  const [presentAndAbsentCount, setPresentAndAbsentCount] = useState({
+    presentCount: 0,
+    absentCount: 0,
+  });
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -27,6 +30,19 @@ function AttendanceTable({ selectedItems }) {
 
     fetchStudents();
   }, []);
+
+  useEffect(() => {
+    const present = attendanceList.filter(
+      (attendance) => attendance.attendanceStatus // true for present
+    ).length;
+    const absent = attendanceList.filter(
+      (attendance) => !attendance.attendanceStatus // false for absent
+    ).length;
+    setPresentAndAbsentCount({
+      presentCount: present,
+      absentCount: absent,
+    });
+  }, [attendanceList]);
 
   // Handle status change for each student
   const handleStatusChange = async (id, newStatus) => {
@@ -48,36 +64,28 @@ function AttendanceTable({ selectedItems }) {
     }
   };
 
-  const { presentCount, absentCount } = useMemo(() => {
-    const present = attendanceList.filter(
-      (attendance) => attendance.attendanceStatus === 'Present'
-    ).length;
-    const absent = attendanceList.filter(
-      (attendance) => attendance.attendanceStatus === 'Absent'
-    ).length;
-    return { presentCount: present, absentCount: absent };
-  }, [attendanceList]);
-
-  const chartData = useMemo(
-    () => ({
-      labels: ['Present', 'Absent'],
-      datasets: [
-        {
-          label: 'Attendance',
-          data: [presentCount, absentCount],
-          backgroundColor: ['#FF6384', '#36A2EB'],
-          hoverBackgroundColor: ['#FF6384', '#36A2EB'],
-          borderWidth: 1,
-        },
-      ],
-    }),
-    [presentCount, absentCount]
-  );
+  const chartData = {
+    labels: ['Absent', 'Present'],
+    datasets: [
+      {
+        label: 'Attendance',
+        data: [
+          presentAndAbsentCount.absentCount,
+          presentAndAbsentCount.presentCount,
+        ],
+        backgroundColor: ['#F87171', '#34D399'],
+        hoverBackgroundColor: ['#EF4444', '#10B981'],
+        borderColor: ['#F87171', '#34D399'],
+        hoverBorderColor: ['#EF4444', '#10B981'],
+        borderWidth: 1,
+      },
+    ],
+  };
 
   return (
     <div className="bg-white shadow-lg rounded-sm border border-slate-200 relative">
       <header className="px-3 py-4">
-        <h2 className="font-semibold text-slate-800">Attendances </h2>
+        <h2 className="font-semibold text-slate-800">Attendances</h2>
       </header>
 
       <div>
@@ -110,19 +118,17 @@ function AttendanceTable({ selectedItems }) {
 
             {/* Table body */}
             <tbody className="text-sm divide-y divide-slate-200">
-              {attendanceList.map((attendance) => {
-                return (
-                  <AttendanceTableItem
-                    key={attendance.id}
-                    id={attendance.id}
-                    enrollmentNo={attendance.enrollmentNumber}
-                    name={attendance.firstName}
-                    status={attendance.attendanceStatus}
-                    onStatusChange={handleStatusChange}
-                    attendanceId={attendance.attendanceId} // Pass the handler to child
-                  />
-                );
-              })}
+              {attendanceList.map((attendance) => (
+                <AttendanceTableItem
+                  key={attendance.id}
+                  id={attendance.id}
+                  enrollmentNo={attendance.enrollmentNumber}
+                  name={attendance.firstName}
+                  status={attendance.attendanceStatus}
+                  onStatusChange={handleStatusChange}
+                  attendanceId={attendance.attendanceId}
+                />
+              ))}
             </tbody>
           </table>
         </div>

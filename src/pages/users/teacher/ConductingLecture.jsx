@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-
-import FacultySidebar from '../../../partials/FacultySidebar';
-import Header from '../../../partials/Header';
-import AttendanceTable from '../../../partials/attendance/AttendanceTable';
-import FacultyLectureAttendanceBanner from '../../../partials/dashboard/FacultyLectureAttendanceBanner';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom"; // Import useParams
+import FacultySidebar from "../../../partials/FacultySidebar";
+import Header from "../../../partials/Header";
+import AttendanceTable from "../../../partials/attendance/AttendanceTable";
+import FacultyLectureAttendanceBanner from "../../../partials/dashboard/FacultyLectureAttendanceBanner";
 
 // Mock data for testing
 const mockStudents = [
-  { id: 1, name: 'John Doe', enrollmentNo: 'A001', status: 'Present' },
-  { id: 2, name: 'Jane Smith', enrollmentNo: 'A002', status: 'Absent' },
-  { id: 3, name: 'Bob Johnson', enrollmentNo: 'A003', status: 'Present' },
+  { id: 1, name: "John Doe", enrollmentNo: "A001", status: "Present" },
+  { id: 2, name: "Jane Smith", enrollmentNo: "A002", status: "Absent" },
+  { id: 3, name: "Bob Johnson", enrollmentNo: "A003", status: "Present" },
 ];
 
 function ConductingLecture() {
@@ -17,24 +17,27 @@ function ConductingLecture() {
   const [students, setStudents] = useState([]);
   const [error, setError] = useState(null);
 
+  const { lectureId } = useParams(); // Retrieve lectureId from URL parameters
+
   useEffect(() => {
     const fetchStudents = async () => {
       try {
         // Uncomment the following lines when your API is ready
-        // const response = await fetch('/api/students');
+        // const response = await fetch(`/api/students?lectureId=${lectureId}`);
         // const data = await response.json();
         // setStudents(data);
 
         // For now, use mock data
+        console.log("Lecture ID:", lectureId); // Log the lectureId for testing
         setStudents(mockStudents);
       } catch (error) {
-        console.error('Error fetching students:', error);
-        setError('Failed to load students. Please try again later.');
+        console.error("Error fetching students:", error);
+        setError("Failed to load students. Please try again later.");
       }
     };
 
     fetchStudents();
-  }, []);
+  }, [lectureId]); // Add lectureId as a dependency
 
   return (
     <div className="flex h-screen overflow-hidden">

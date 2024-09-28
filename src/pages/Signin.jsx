@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import AuthImage from '../images/auth-image.jpg';
-import { useForm } from 'react-hook-form';
-import { login } from '../apis/login';
-import { setUsername, setUserRole } from '../service/localstorage';
+import AuthImage from "../images/auth-image.jpg";
+import { useForm } from "react-hook-form";
+import { login } from "../apis/login";
+import { setUsername, setUserRole } from "../service/localstorage";
 
-import Logo from '../images/logo.svg';
+import Logo from "../images/logo.svg";
 
 function Signin() {
   const {
@@ -18,29 +18,29 @@ function Signin() {
 
   const navigate = useNavigate();
 
-  const password = watch('password');
+  const password = watch("password");
 
   const onSubmit = async (data, event) => {
     event.preventDefault();
     // console.log(data);
-    try {
-      const response = await login(data.username, data.password);
-      if (response.status) {
-        setUserRole(response.body.role);
-        setUsername(response.body.username);
-        console.log(response);
-        if (response.body.role === 'ADMIN') {
-          navigate('/admin/dashboard');
-        } else if (response.body.role === 'TEACHER') {
-          navigate('/faculty/dashboard');
-        } else if (response.body.role === 'STUDENT');
-        {
-          navigate('/student/dashboard');
-        }
+    // try {
+    const response = await login(data.username, data.password);
+    if (response.status) {
+      setUserRole(response.body.role);
+      setUsername(response.body.username);
+      console.log(response);
+      if (response.body.role === "ADMIN") {
+        navigate("/admin/dashboard");
+      } else if (response.body.role === "TEACHER") {
+        navigate("/faculty/dashboard");
+      } else if (response.body.role === "STUDENT");
+      {
+        navigate("/student/dashboard");
       }
-    } catch (error) {
-      // alert(error);
     }
+    // } catch (error) {
+    //   // alert(error);
+    // }
   };
 
   return (
@@ -78,12 +78,12 @@ function Signin() {
                       className="form-input w-full"
                       id="username"
                       aria-describedby="emailHelp"
-                      {...register('username', {
-                        required: 'Username must be required.',
+                      {...register("username", {
+                        required: "Username must be required.",
                         pattern: {
                           value:
                             /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                          message: 'Invalid username.',
+                          message: "Invalid username.",
                         },
                       })}
                     />
@@ -102,8 +102,8 @@ function Signin() {
                       type="password"
                       className="form-input w-full"
                       id="password"
-                      {...register('password', {
-                        required: 'Password must be required.',
+                      {...register("password", {
+                        required: "Password must be required.",
                         // minLength: {
                         //   value: 0,
                         //   message: "Password must be at least 6 characters long",

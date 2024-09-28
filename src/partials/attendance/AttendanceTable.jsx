@@ -67,9 +67,7 @@ function AttendanceTable({ selectedItems }) {
       </header>
 
       <div>
-        <div style={{ position: "absolute", top: "-200px", left: "55%" }}>
-          <DoughnutChart data={chartData} width={120} height={120} />
-        </div>
+      
 
         {/* Table */}
         <div className="overflow-x-auto">

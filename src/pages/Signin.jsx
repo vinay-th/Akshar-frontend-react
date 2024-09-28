@@ -33,8 +33,7 @@ function Signin() {
           navigate('/admin/dashboard');
         } else if (response.body.role === 'TEACHER') {
           navigate('/faculty/dashboard');
-        }
-        elseif(response.body.role === 'STUDENT');
+        } else if (response.body.role === 'STUDENT');
         {
           navigate('/student/dashboard');
         }

@@ -261,26 +261,24 @@ function ConductLecture() {
                 </button>
               </div>
             </div>
-<<<<<<< HEAD
-=======
+
             <div className="flex justify-center items-center">
               <button
                 className="text-white px-4 py-2 rounded-md"
                 style={{
-                  backgroundColor: '#6366F1',
-                  fontSize: '1.2rem',
-                  position: 'absolute',
-                  bottom: '20px',
-                  left: '900px',
+                  backgroundColor: "#6366F1",
+                  fontSize: "1.2rem",
+                  position: "absolute",
+                  bottom: "20px",
+                  left: "900px",
                 }}
                 onClick={() => {
-                  window.location.href = '/faculty/conducting-lecture';
+                  window.location.href = "/faculty/conducting-lecture";
                 }}
               >
                 Conduct Lecture
               </button>
             </div>
->>>>>>> f3dade8cf9a46485e8c6aed5d26f5ffe59b030ae
           </div>
         </main>
       </div>

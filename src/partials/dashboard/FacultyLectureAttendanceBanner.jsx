@@ -1,34 +1,20 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import DoughnutChart from "../../charts/DoughnutChart";
-import { endLecture } from "../../apis/teacher/conductingLecture";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { endLecture } from '../../apis/teacher/conductingLecture';
+import { useNavigate } from 'react-router-dom';
 
 function FacultyLectureAttendanceBanner() {
   const { username, role, id } = useSelector((store) => store.userDetailStore);
 
   const navigate = useNavigate();
 
-  const chartData = {
-    labels: ["Present", "Absent"],
-    datasets: [
-      {
-        label: "Attendance",
-        data: [1, 1],
-        backgroundColor: ["#FF6384", "#36A2EB"],
-        hoverBackgroundColor: ["#FF6384", "#36A2EB"],
-        borderWidth: 1,
-      },
-    ],
-  }; // A
-
   const handleOnEndLecture = async () => {
-    const id = localStorage.getItem("lectureId");
+    const id = localStorage.getItem('lectureId');
 
     const response = await endLecture({ teacherId: id, id });
     if (response.status) {
-      localStorage.removeItem("lectureId");
-      navigate("/faculty/conduct-lecture");
+      localStorage.removeItem('lectureId');
+      navigate('/faculty/conduct-lecture');
     }
   };
 
@@ -105,7 +91,7 @@ function FacultyLectureAttendanceBanner() {
           </h1>
           <h1
             className="text-2xl md:text-2xl text-slate-800 font-bold mb-1"
-            style={{ marginRight: "700px" }}
+            style={{ marginRight: '700px' }}
           >
             Subject:
           </h1>
@@ -118,13 +104,16 @@ function FacultyLectureAttendanceBanner() {
         </h1>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          style={{ position: "absolute", right: "620px", top: "60px" }}
+          style={{ position: 'absolute', right: '620px', top: '60px' }}
+          onClick={() => {
+            navigate('/Faculty/whiteboard');
+          }}
         >
           Start Whiteboard
         </button>
         <button
           className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          style={{ position: "absolute", right: "823px", top: "60px" }}
+          style={{ position: 'absolute', right: '823px', top: '60px' }}
           onClick={() => {
             handleOnEndLecture();
           }}
@@ -132,10 +121,6 @@ function FacultyLectureAttendanceBanner() {
           End Lecture
         </button>
       </div>
-      {/* <div style={{ position: "absolute", top: "-200px", left: "55%" }}>
-        a
-        <DoughnutChart data={chartData} width={120} height={120} />
-      </div> */}
     </div>
   );
 }

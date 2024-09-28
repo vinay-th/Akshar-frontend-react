@@ -6,6 +6,7 @@ import {
   confirmGeoCoordinatesOfClassRoom,
   getAllClassRoom,
   getClassRoomDetails,
+  addClassRoom, // Import the addClassRoom function from the API
 } from "../../../apis/admin/classRoom.js";
 
 const ClassRoomMapping = () => {
@@ -16,6 +17,7 @@ const ClassRoomMapping = () => {
   const [bottomRight, setBottomRight] = useState({ long: 0.0, lat: 0.0 });
   const [bottomLeft, setBottomLeft] = useState({ long: 0.0, lat: 0.0 });
   const [currentClassRoom, setCurrentClassRoom] = useState(null);
+  const [newClassroomName, setNewClassroomName] = useState(""); // State for the new classroom name
 
   const fetchClassrooms = async () => {
     const response = await getAllClassRoom();
@@ -50,6 +52,7 @@ const ClassRoomMapping = () => {
 
   const failedToGet = (error) => {
     console.log(`Error: ${error.message}`);
+    alert("not implemented");
   };
 
   // Handler to set the location for the given coordinate
@@ -82,6 +85,26 @@ const ClassRoomMapping = () => {
     };
     const response = await confirmGeoCoordinatesOfClassRoom(data);
     console.log(response);
+  };
+
+  // New function to handle adding the classroom
+  const handleAddClassroom = async () => {
+    if (newClassroomName.trim() === "") {
+      alert("Please enter a classroom name");
+      return;
+    }
+
+    const data = {
+      classRoomNumber: newClassroomName,
+      // You can add more classroom details here if needed
+    };
+
+    const response = await addClassRoom(data);
+    if (response.status) {
+      // Update the classrooms list by re-fetching the classrooms
+      fetchClassrooms();
+      setNewClassroomName(""); // Clear the input field after adding
+    }
   };
 
   useEffect(() => {
@@ -121,10 +144,15 @@ const ClassRoomMapping = () => {
                 <div className="flex justify-between">
                   <input
                     type="text"
-                    placeholder="enter classroom name"
+                    placeholder="Enter classroom name"
                     className="border border-gray-300 rounded-md w-60 p-2"
+                    value={newClassroomName}
+                    onChange={(e) => setNewClassroomName(e.target.value)} // Update state on input change
                   />
-                  <button className="bg-blue-500 hover:bg-blue-700 ml-2 text-white font-bold py-2 px-4 rounded">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 ml-2 text-white font-bold py-2 px-4 rounded"
+                    onClick={handleAddClassroom} // Add the onClick handler for the button
+                  >
                     Add Classroom
                   </button>
                 </div>
@@ -208,7 +236,10 @@ const ClassRoomMapping = () => {
               </div>
             </div>
             <div className=" gap-6">
-              <ClassRoomTable />
+              <ClassRoomTable
+                setClassrooms={setClassrooms}
+                classrooms={classrooms}
+              />
             </div>
           </div>
         </main>

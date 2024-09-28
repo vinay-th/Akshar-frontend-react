@@ -50,3 +50,37 @@ export const confirmGeoCoordinatesOfClassRoom = async (data) => {
   }
   return response.json();
 };
+
+export const deleteClassRoom = async (data) => {
+  const response = await fetch(GLOBAL_URL + "admin/classRoom/deleteClassRoom", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    alert("Invalid Username or password");
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
+
+export const addClassRoom = async (data) => {
+  const response = await fetch(GLOBAL_URL + "admin/classRoom/addClassRoom", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    alert("Invalid Username or password");
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};

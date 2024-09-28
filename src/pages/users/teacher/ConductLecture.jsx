@@ -1,79 +1,93 @@
-import React, { useEffect, useState } from 'react';
-import FacultySidebar from '../../../partials/FacultySidebar';
-import Header from '../../../partials/Header';
-import AttendanceTable from '../../../partials/attendance/AttendanceTable';
+import React, { useEffect, useState } from "react";
+import FacultySidebar from "../../../partials/FacultySidebar";
+import Header from "../../../partials/Header";
+import AttendanceTable from "../../../partials/attendance/AttendanceTable";
 import {
   getAllBatchsForTeacher,
   getAllCoursesForTeacher,
   getAllSubjectForTeacher,
   getClassRoomsForTeachers,
   getSectionForTeacher,
-} from '../../../apis/teacher/conductLecture';
-import { getClassRoomDetails } from '../../../apis/admin/classRoom';
-import { conductLectureAPI } from '../../../apis/teacher/conductLecture'; // Import your API function for the POST request
-import { useSelector } from 'react-redux';
+} from "../../../apis/teacher/conductLecture";
+import { conductLectureAPI } from "../../../apis/teacher/conductLecture"; // Import your API function for the POST request
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function ConductLecture() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { username, role, id } = useSelector((store) => store.userDetailStore);
+  const navigate = useNavigate();
 
   // States for each field
   const [courses, setCourses] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState("");
   const [batches, setBatches] = useState([]);
-  const [selectedBatch, setSelectedBatch] = useState('');
+  const [selectedBatch, setSelectedBatch] = useState("");
   const [sections, setSections] = useState([]);
-  const [selectedSection, setSelectedSection] = useState('');
+  const [selectedSection, setSelectedSection] = useState("");
   const [classrooms, setClassrooms] = useState([]);
-  const [selectedClassroom, setSelectedClassroom] = useState('');
+  const [selectedClassroom, setSelectedClassroom] = useState("");
   const [subjects, setSubjects] = useState([]);
-  const [selectedSubject, setSelectedSubject] = useState(''); // Replace with actual teacher ID from your context or auth state
+  const [selectedSubject, setSelectedSubject] = useState("");
+
   // Fetch courses (example function, replace with actual API call)
   const fetchCourses = async () => {
-    const response = await getAllCoursesForTeacher();
-    console.log(response.body.course);
-    // Set the courses state with the fetched data
-    setCourses(response.body.course || []);
+    try {
+      const response = await getAllCoursesForTeacher();
+      setCourses(response.body.course || []);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
   };
 
-  // Example fetch functions for other fields (implement actual logic as needed)
   const fetchBatches = async (courseId) => {
-    // Fetch batches based on selected course
-    const response = await getAllBatchsForTeacher({ id: courseId });
-    console.log(response);
-    setBatches(response.body);
+    try {
+      const response = await getAllBatchsForTeacher({ id: courseId });
+      setBatches(response.body || []);
+    } catch (error) {
+      console.error("Error fetching batches:", error);
+    }
   };
 
   const fetchSections = async (batchId) => {
-    const response = await getSectionForTeacher({ id: batchId });
-    console.log(response);
-    setSections(response.body);
+    try {
+      const response = await getSectionForTeacher({ id: batchId });
+      setSections(response.body || []);
+    } catch (error) {
+      console.error("Error fetching sections:", error);
+    }
   };
 
   const fetchClassrooms = async () => {
-    const response = await getClassRoomsForTeachers();
-    console.log(response);
-    setClassrooms(response.body.classRoomList);
+    try {
+      const response = await getClassRoomsForTeachers();
+      setClassrooms(response.body.classRoomList || []);
+    } catch (error) {
+      console.error("Error fetching classrooms:", error);
+    }
   };
 
   const fetchSubjects = async (sectionId) => {
-    const response = await getAllSubjectForTeacher({ id: sectionId });
-    console.log(response, 'subjects');
-    setSubjects(response.body.subjectList);
+    try {
+      const response = await getAllSubjectForTeacher({ id: sectionId });
+      setSubjects(response.body.subjectList || []);
+    } catch (error) {
+      console.error("Error fetching subjects:", error);
+    }
   };
 
   // Fetch courses on component mount
   useEffect(() => {
     fetchCourses();
     fetchClassrooms();
-  }, []);
+  }, []); // Only run once on mount
 
   // Handlers for onChange events
   const handleCourseChange = (event) => {
     const courseId = event.target.value;
     setSelectedCourse(courseId);
     fetchBatches(courseId);
-    fetchSubjects(courseId); // Fetch batches when course changes
+    fetchSubjects(courseId);
   };
 
   const handleBatchChange = (event) => {
@@ -98,55 +112,52 @@ function ConductLecture() {
 
   // Conduct Lecture POST method
   const conductLecture = async () => {
-    // Construct the DTO object based on your selected values and teacher ID
     const lectureDTO = {
-      courseId: selectedCourse, // Selected Course ID
-      batchId: selectedBatch, // Selected Batch ID
-      sectionId: selectedSection, // Selected Section ID
-      teacherId: id, // Current Teacher ID
-      classRoomId: selectedClassroom, // Selected Classroom ID
+      courseId: selectedCourse,
+      batchId: selectedBatch,
+      sectionId: selectedSection,
+      teacherId: id,
+      classRoomId: selectedClassroom,
+      subjectId: selectedSubject,
     };
-
     console.log(lectureDTO);
     try {
-      // Make the POST request to your API endpoint
       const response = await conductLectureAPI(lectureDTO);
 
-      if (response.ok) {
-        // Handle success (optional)
-        console.log('Lecture conducted successfully!');
+      if (response.status && response.body && response.body.id) {
+        // Extract the lecture ID from the response
+        const lectureId = response.body.id;
+
+        // Navigate to the new page with lectureId as state or URL parameter
+        navigate(`/faculty/conducting-lecture`, { state: { lectureId } });
       } else {
-        // Handle error (optional)
-        console.error('Error conducting lecture:', response.statusText);
+        console.error("Error conducting lecture:", response.statusText);
       }
     } catch (error) {
-      console.error('API call failed:', error);
+      console.error("API call failed:", error);
     }
   };
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* FacultySidebar */}
       <FacultySidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
       />
 
-      {/* Content area */}
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-        {/*  Site header */}
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
         <main>
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            <div className="gap-4" style={{ width: '700px' }}>
+            <div className="gap-4" style={{ width: "700px" }}>
               <h1 className="text-2xl font-semibold">Conduct Lecture</h1>
               <div className="flex flex-col gap-4 justify-between mt-10">
                 {/* Select Course */}
                 <div className="gap-2">
                   <h1
                     className="font-bold text-xl"
-                    style={{ fontSize: '1.5rem', color: '#6366F1' }}
+                    style={{ fontSize: "1.5rem", color: "#6366F1" }}
                   >
                     Select Course
                   </h1>
@@ -168,7 +179,7 @@ function ConductLecture() {
                 <div className="gap-2">
                   <h1
                     className="font-bold text-xl"
-                    style={{ fontSize: '1.5rem', color: '#6366F1' }}
+                    style={{ fontSize: "1.5rem", color: "#6366F1" }}
                   >
                     Select Batch
                   </h1>
@@ -190,7 +201,7 @@ function ConductLecture() {
                 <div className="gap-2">
                   <h1
                     className="font-bold text-xl"
-                    style={{ fontSize: '1.5rem', color: '#6366F1' }}
+                    style={{ fontSize: "1.5rem", color: "#6366F1" }}
                   >
                     Select Section
                   </h1>
@@ -212,7 +223,7 @@ function ConductLecture() {
                 <div className="gap-2">
                   <h1
                     className="font-bold text-xl"
-                    style={{ fontSize: '1.5rem', color: '#6366F1' }}
+                    style={{ fontSize: "1.5rem", color: "#6366F1" }}
                   >
                     Select Classroom
                   </h1>
@@ -234,7 +245,7 @@ function ConductLecture() {
                 <div className="gap-2">
                   <h1
                     className="font-bold text-xl"
-                    style={{ fontSize: '1.5rem', color: '#6366F1' }}
+                    style={{ fontSize: "1.5rem", color: "#6366F1" }}
                   >
                     Select Subject
                   </h1>
@@ -251,22 +262,17 @@ function ConductLecture() {
                     ))}
                   </select>
                 </div>
+
+                {/* Conduct Lecture Button */}
+                <div className="mt-4">
+                  <button
+                    className="bg-indigo-500 text-white py-2 px-4 rounded"
+                    onClick={conductLecture}
+                  >
+                    Conduct Lecture
+                  </button>
+                </div>
               </div>
-            </div>
-            <div className="flex justify-center items-center">
-              <button
-                className="text-white px-4 py-2 rounded-md"
-                style={{
-                  backgroundColor: '#6366F1',
-                  fontSize: '1.2rem',
-                  position: 'absolute',
-                  bottom: '20px',
-                  left: '900px',
-                }}
-                onClick={conductLecture}
-              >
-                Conduct Lecture
-              </button>
             </div>
           </div>
         </main>

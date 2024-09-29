@@ -21,6 +21,7 @@ import AttendLecture from './pages/users/student/AttendLecture.jsx';
 import ClassRoomMapping from './pages/users/admin/ClassRoomMapping';
 import Whiteboard from './pages/users/teacher/Whiteboard';
 import Chatbot from './pages/users/student/Chatbot.jsx';
+import RecentLectures from './pages/users/teacher/RecentLectures';
 function App() {
   const location = useLocation();
 
@@ -57,6 +58,7 @@ function App() {
           <Route path="dashboard" element={<TeacherDashboard />} />
           <Route path="conduct-lecture" element={<ConductLecture />} />
           <Route path="conducting-lecture" element={<ConductingLecture />} />
+          <Route path="recent-lectures" element={<RecentLectures />} />
           <Route path="whiteboard" element={<Whiteboard />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>

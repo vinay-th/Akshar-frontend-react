@@ -4,8 +4,6 @@ import FacultySidebar from '../../../partials/FacultySidebar';
 import Header from '../../../partials/Header';
 import AttendanceTable from '../../../partials/attendance/AttendanceTable';
 import FacultyLectureAttendanceBanner from '../../../partials/dashboard/FacultyLectureAttendanceBanner';
-import { getStudentForCurrentLecture } from '../../../apis/teacher/conductingLecture';
-// Mock data for testing
 
 function ConductingLecture() {
   const [sidebarOpen, setSidebarOpen] = useState(false);

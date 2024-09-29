@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import AttendanceTableItem from './AttendanceTableItem';
-import DoughnutChart from '../../charts/DoughnutChart';
 import {
   getStudentForCurrentLecture,
   markAttendence,
@@ -64,24 +63,6 @@ function AttendanceTable() {
     }
   };
 
-  const chartData = {
-    labels: ['Absent', 'Present'],
-    datasets: [
-      {
-        label: 'Attendance',
-        data: [
-          presentAndAbsentCount.absentCount,
-          presentAndAbsentCount.presentCount,
-        ],
-        backgroundColor: ['#F87171', '#34D399'],
-        hoverBackgroundColor: ['#EF4444', '#10B981'],
-        borderColor: ['#F87171', '#34D399'],
-        hoverBorderColor: ['#EF4444', '#10B981'],
-        borderWidth: 1,
-      },
-    ],
-  };
-
   return (
     <div className="bg-white shadow-lg rounded-sm border border-slate-200 relative">
       <header className="px-3 py-4">
@@ -89,9 +70,9 @@ function AttendanceTable() {
       </header>
 
       <div>
-        <div style={{ position: 'absolute', top: '-200px', left: '55%' }}>
+        {/* <div style={{ position: 'absolute', top: '-200px', left: '55%' }}>
           <DoughnutChart data={chartData} width={120} height={120} />
-        </div>
+        </div> */}
 
         {/* Table */}
         <div className="overflow-x-auto">

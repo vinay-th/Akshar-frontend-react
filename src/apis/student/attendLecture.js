@@ -66,3 +66,22 @@ export const checkStudentPresenceInClass = async (data) => {
   }
   return response.json();
 };
+
+export const downloadNotes = async (data) => {
+  const response = await fetch(GLOBAL_URL + "student/lecture/downloadNotes", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    alert("Invalid Username or password");
+    throw new Error("Network response was not ok");
+  }
+
+  // Return the response as a blob since it's binary data (zip file)
+  return response.blob();
+};

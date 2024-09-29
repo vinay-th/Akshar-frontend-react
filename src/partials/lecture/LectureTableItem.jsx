@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Upload from "../../../public/svgs/upload.svg";
 import Download from "../../../public/svgs/download.svg";
-import { checkStudentPresenceInClass } from "../../apis/student/attendLecture"; // Adjust the import path accordingly
+import {
+  checkStudentPresenceInClass,
+  downloadNotes,
+} from "../../apis/student/attendLecture"; // Adjust the import path accordingly
 import CameraComponent from "../../pages/users/student/CameraComponent";
 
 const MARK_ATTENDANCE_URL = "https://example.com/api/markAttendance";
@@ -41,6 +44,28 @@ function LectureTableItem(props) {
       );
     } else {
       console.log("Geolocation is not supported by this browser.");
+    }
+  };
+
+  const handleDownload = async () => {
+    try {
+      // Call the API to download the notes as a zip file
+      const blob = await downloadNotes({ id: props.id });
+
+      // Create a URL for the binary data (the zip file)
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "notes.zip"); // Specify the name for the downloaded file
+
+      // Append the link to the document and click it programmatically to download the file
+      document.body.appendChild(link);
+      link.click();
+
+      // Clean up by removing the link element from the document
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading SVG images:", error);
     }
   };
 
@@ -120,28 +145,23 @@ function LectureTableItem(props) {
         </td>
         <td>
           <div className={`font-medium text-center text-slate-800`}>
-            {props.homework ? (
-              <img
-                src={Upload}
-                className="opacity-60 hover:opacity-100 transition-opacity duration-200"
-                alt="Upload"
-              />
-            ) : (
-              "---"
-            )}
+            <img
+              src={Upload}
+              className="opacity-60 hover:opacity-100 transition-opacity duration-200"
+              alt="Upload"
+            />
           </div>
         </td>
         <td>
-          <div className={`font-medium text-center text-slate-800`}>
-            {props.notes ? (
-              <img
-                src={Download}
-                className="opacity-60 hover:opacity-100 transition-opacity duration-200 "
-                alt="Download"
-              />
-            ) : (
-              "---"
-            )}
+          <div
+            className={`font-medium text-center text-slate-800`}
+            onClick={handleDownload}
+          >
+            <img
+              src={Download}
+              className="opacity-60 hover:opacity-100 transition-opacity duration-200 "
+              alt="Download"
+            />
           </div>
         </td>
         <td>

@@ -33,13 +33,13 @@ function LectureTable() {
     fetchLectures();
 
     // Set up interval
-    const intervalId = setInterval(() => {
-      fetchLectures();
-    }, 5000); // Fetch every 5 seconds
 
-    // Clean up the interval on component unmount
-    return () => clearInterval(intervalId);
-  }, []); // Empty dependency array ensures it runs once on mount and sets the interval
+    // Clean up the interval on component unmou
+  }, []);
+
+  const reFetchLectures = () => {
+    fetchLectures();
+  };
 
   return (
     <div className="bg-white shadow-lg rounded-sm border border-slate-200 relative">
@@ -111,6 +111,8 @@ function LectureTable() {
                     homework={lecture.homework}
                     notes={lecture.notes}
                     attendanceStatus={lecture.studentAttendanceMark}
+                    attendanceId={lecture.attendanceId}
+                    reFetchLectures={reFetchLectures}
                   />
                 ))
               ) : (

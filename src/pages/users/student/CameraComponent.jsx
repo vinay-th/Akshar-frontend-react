@@ -1,20 +1,40 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { sendFrameToBackend } from "../../../apis/student/attendLecture";
+import { useNavigate } from "react-router-dom";
 
-const CameraComponent = ({ onFrameCaptured }) => {
+const CameraComponent = ({ attendanceId, attended }) => {
   const videoRef = useRef(null);
+  const [capturing, setCapturing] = useState(true);
+  const navigate = useNavigate(); // State to control frame capture
 
   const handleFrameCaptured = async (frameDataUrl) => {
-    // Here, send the captured frame to your backend for facial recognition
-    // You can use fetch or any other method to send the data to your backend.
-    console.log("Captured frame:", frameDataUrl);
-    // Example (send to backend):
-    const response = await sendFrameToBackend(frameDataUrl);
-    // if(response.message === "success") { handle success }
+    try {
+      // Send the captured frame to your backend for facial recognition
+      const response = await sendFrameToBackend({
+        imageData: frameDataUrl,
+        studentId: localStorage.getItem("id"),
+        attendanceId: attendanceId,
+      });
+
+      console.log(response.status);
+
+      if (response.status === "true") {
+        // Stop capturing frames when response.status is true
+        setCapturing(false);
+        // alert("Attendance marked successfully!");
+        attended();
+      } else {
+        console.error("Failed to send frame:", response);
+      }
+    } catch (err) {
+      console.error("Error sending frame to backend:", err);
+    }
   };
 
   useEffect(() => {
-    // Access the webcam
+    let stream = null;
+
+    // Start video stream
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then((stream) => {
@@ -24,15 +44,17 @@ const CameraComponent = ({ onFrameCaptured }) => {
         console.error("Error accessing the camera", err);
       });
 
-    // Capture frames at regular intervals
+    // Capture frames at regular intervals if capturing is true
     const intervalId = setInterval(() => {
-      captureFrame();
-    }, 500); // Capture frame every 1000 milliseconds (1 second)
+      if (capturing) {
+        captureFrame();
+      }
+    }, 700); // Capture frame every 500 milliseconds
 
     return () => {
       clearInterval(intervalId); // Clear interval when the component unmounts
     };
-  }, []);
+  }, [capturing]); // Re-run the effect if capturing state changes
 
   // Capture a frame from the video
   const captureFrame = () => {
@@ -43,7 +65,7 @@ const CameraComponent = ({ onFrameCaptured }) => {
       const ctx = canvas.getContext("2d");
       ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
       const dataUrl = canvas.toDataURL("image/png"); // Capture frame as base64
-      handleFrameCaptured(dataUrl); // Send frame to parent component
+      handleFrameCaptured(dataUrl); // Send frame to the backend
     }
   };
 
